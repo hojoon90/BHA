@@ -1,0 +1,5 @@
+rootProject.name = 'BHA'
+include 'controller'
+include 'core'
+include 'jpa'
+
