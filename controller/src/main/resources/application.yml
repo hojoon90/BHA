@@ -1,0 +1,28 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+server:
+  #  ssl:
+  #    enabled: true
+  #    key-store: keystore.p12
+  #    key-store-password: P@ssw0rd
+  #  port: 443
+  port: 8080
+  servlet:
+    context-path: /
+  error:
+    whitelabel:
+      enabled : true
+    path: /error
+    include-message: always
+active:
+  server: local
+  max-http-header-size: 0
