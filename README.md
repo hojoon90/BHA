@@ -23,3 +23,6 @@ Jenkins (Github으로 사용 가능한지 확인 필요)
 
 #### Front
 Vue3
+
+#### etc
+VPN 적용중(softEther VPN) https://frog-outwell.tistory.com/1
