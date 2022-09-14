@@ -25,4 +25,6 @@ Jenkins (Github으로 사용 가능한지 확인 필요)
 Vue3
 
 #### etc
-VPN 적용중(softEther VPN) https://frog-outwell.tistory.com/1
+VPN 적용완료(softEther VPN) \
+<https://frog-outwell.tistory.com/1> \
+<https://m.blog.naver.com/foenix/221602876727>
