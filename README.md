@@ -28,3 +28,6 @@ Vue3
 VPN 적용완료(softEther VPN) \
 <https://frog-outwell.tistory.com/1> \
 <https://m.blog.naver.com/foenix/221602876727>
+
+#### erd 작성중
+<https://www.erdcloud.com/d/RcrcFcvzty8EG3vfJ>
