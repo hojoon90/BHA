@@ -8,6 +8,28 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+  data:
+    maria:
+      jdbc-url: jdbc:mariadb://192.168.50.251:3306/BHA
+      driver-class-name: org.mariadb.jdbc.Driver
+      username: root
+      password: root
+    jpa:
+      properties:
+        hibernate:
+          show_sql: true
+          format_sql: true
+          #DDL 자동 생성
+          # 데이터베이스 스키마 자동생성은 객체에 정의한 정보를 바탕으로 테이블을 만들어주는 기능이다.
+          # JPA가 DDL(Data Definition Language, 데이터 베이스의 스키마(테이블명, 열 이름 등)을 만들어주는 SQL문 집합) 을 자동으로 생성해준다.
+          # 단순히 생성해주는 것이 아니라, persistence.xml에서 지정한 SQL dialect에 맞는 적절한 DDL을 생성해준다.
+          # 편리한 기능이지만 실제 운영 서버에 사용하기에는 한계점이 있기 때문에 생성된 DDL을 바탕으로 적절히 다듬어서 사용해야 한다.
+          # 즉 객체를 생성하는 것만으로 DB 테이블 및 컬럼 컨트롤이 가능하다.
+          ddl-auto: update
+          temp:
+            use_jdbc_metadata_defaults: false
+      generate-ddl: true
+
 
 server:
   #  ssl:
