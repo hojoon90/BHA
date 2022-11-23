@@ -8,6 +8,9 @@ import org.springframework.context.annotation.Configuration;
 public class BHAConfig {
 
     @Bean
+    public DBConfig dbConfig() {return new DBConfig();}
+
+    @Bean
     public BoardService boardService(){
         return new BoardService();
     }
