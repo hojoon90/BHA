@@ -45,7 +45,7 @@ public class DBConfig {
         map.put("hibernate.ejb.naming_strategy", "org.hibernate.cfg.ImprovedNamingStrategy");
         map.put("hibernate.dialect", "org.hibernate.dialect.MySQL5InnoDBDialect");
         return builder.dataSource(dataSource)
-                .packages("com.jpatest.model")
+                .packages("com.bupjangsa.domain")
                 .properties(map)
                 .build();
     }
