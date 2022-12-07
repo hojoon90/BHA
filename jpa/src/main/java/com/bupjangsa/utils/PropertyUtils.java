@@ -1,20 +1,18 @@
 package com.bupjangsa.utils;
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Parameters;
 import org.apache.commons.configuration2.ex.ConfigurationException;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Iterator;
 
 
-@Slf4j
 public class PropertyUtils {
     private static Configuration configuration;
-    private static final String defaultPropertyPath = "properties/jadlake.properties";
+    private static final String defaultPropertyPath = "properties/jpa-config.properties";
 
     static {
         configuration = PropertyUtils.getConfiguration(defaultPropertyPath);
@@ -32,7 +30,6 @@ public class PropertyUtils {
         try {
             return (Configuration) builder.getConfiguration();
         } catch (ConfigurationException var7) {
-            log.error("");
             return null;
         }
     }

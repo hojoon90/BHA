@@ -1,5 +1,6 @@
 package com.bupjangsa.config;
 
+import com.bupjangsa.utils.PropertyUtils;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -28,6 +29,10 @@ import java.util.Map;
         entityManagerFactoryRef = "mariaDB_entityManagerFactory"
 )
 public class DBConfig {
+    static{
+        PropertyUtils.add("properties/jpa-config.properties");
+    }
+
     @Primary
     @Bean(name = "maria_dataSource")
     @ConfigurationProperties("spring.data.maria")
