@@ -9,6 +9,7 @@ import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -23,11 +24,7 @@ import java.util.Map;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(
-        basePackages = "com.bupjangsa.repository",
-        transactionManagerRef = "mariaDB_transactionManager",
-        entityManagerFactoryRef = "mariaDB_entityManagerFactory"
-)
+@PropertySource("classpath:properties/jpa-config.properties")
 public class DBConfig {
     static{
         PropertyUtils.add("properties/jpa-config.properties");
