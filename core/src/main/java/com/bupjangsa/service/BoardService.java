@@ -6,7 +6,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class BoardService {
 
+
     public void postArticle(AllBoard allBoard){
 
+    }
+
+    public AllBoard selectBoard(){
+        return null
     }
 }
