@@ -12,6 +12,6 @@ public class BoardService {
     }
 
     public AllBoard selectBoard(){
-        return null
+        return null;
     }
 }
