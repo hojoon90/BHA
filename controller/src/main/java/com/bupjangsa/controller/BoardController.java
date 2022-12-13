@@ -20,10 +20,10 @@ public class BoardController {
         //TODO 게시글 등록
     }
 
-    @GetMapping(value = "/article")
-    public AllBoard getArticle(){
+    @GetMapping(value = "/article/{boardType}/{boardNo}")
+    public AllBoard getArticle(@PathVariable String boardType, @PathVariable int boardNo){
         //TODO 게시글 조회
-        return null;
+        return boardService.selectBoard(boardType, boardNo);
     }
 
     @PutMapping(value = "/article")

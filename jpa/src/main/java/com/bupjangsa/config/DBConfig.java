@@ -1,7 +1,7 @@
 package com.bupjangsa.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
@@ -26,13 +26,10 @@ import java.util.HashMap;
         entityManagerFactoryRef = "masterEntityManager",
         transactionManagerRef = "masterTransactionManager"
 )
+@RequiredArgsConstructor
 public class DBConfig {
 
-    @Autowired
-    private EntityManager em;
-
-    @Autowired
-    private Environment env;
+    private final Environment env;
 
     @Bean
     @Primary
@@ -67,11 +64,6 @@ public class DBConfig {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(masterEntityManager().getObject());
         return transactionManager;
-    }
-
-    @Bean
-    public JPAQueryFactory jpaQueryFactory(){
-        return new JPAQueryFactory(em);
     }
 
 }

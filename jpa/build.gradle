@@ -30,8 +30,8 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
     
     //queryDsl
-    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
-    implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+    api "com.querydsl:querydsl-jpa:${queryDslVersion}"
+    api "com.querydsl:querydsl-apt:${queryDslVersion}"
 }
 
 test {
