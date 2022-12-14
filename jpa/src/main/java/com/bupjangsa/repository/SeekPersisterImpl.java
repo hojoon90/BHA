@@ -3,8 +3,6 @@ package com.bupjangsa.repository;
 import com.bupjangsa.domain.AllBoard;
 import com.bupjangsa.domain.QAllBoard;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
 
 public class SeekPersisterImpl implements SeekPersister{
 

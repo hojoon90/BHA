@@ -16,8 +16,8 @@ public class BoardController {
 
     @PostMapping(value = "/article")
     public void postArticle(@RequestBody AllBoard allBoard){
-//        boardService
         //TODO 게시글 등록
+        boardService.postArticle(allBoard);
     }
 
     @GetMapping(value = "/article/{boardType}/{boardNo}")

@@ -18,7 +18,7 @@ public class BHAConfig {
 
     @Bean
     public BoardService boardService(){
-        return new BoardService(new SeekPersisterImpl(jpaQueryFactory()), new CollectPersisterImpl(jpaQueryFactory()));
+        return new BoardService(new SeekPersisterImpl(jpaQueryFactory()), new CollectPersisterImpl(jpaQueryFactory(), em));
     }
 
     @Bean

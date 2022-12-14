@@ -14,7 +14,7 @@ public class BoardService {
     private final CollectPersister collectPersister;
 
     public void postArticle(AllBoard allBoard){
-
+        collectPersister.postArticle(allBoard);
     }
 
     public AllBoard selectBoard(String boardType, int boardNo){
