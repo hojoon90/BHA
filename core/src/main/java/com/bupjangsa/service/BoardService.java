@@ -20,4 +20,8 @@ public class BoardService {
     public AllBoard selectBoard(String boardType, int boardNo){
         return seekPersister.selectBoard(boardType, boardNo);
     }
+
+    public void putArticle(AllBoard allBoard){
+        collectPersister.putArticle(allBoard);
+    }
 }

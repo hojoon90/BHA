@@ -27,8 +27,9 @@ public class BoardController {
     }
 
     @PutMapping(value = "/article")
-    public void putArticle(){
+    public void putArticle(@RequestBody AllBoard allBoard){
         //TODO 게시글 수정
+        boardService.putArticle(allBoard);
     }
 
 
