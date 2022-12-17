@@ -1,38 +1,56 @@
 package com.bupjangsa.config;
 
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.jdbc.DataSourceBuilder;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
+
 import org.springframework.core.env.Environment;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 import java.util.HashMap;
 
+
 @Configuration
 @PropertySource(value = "classpath:properties/jpa-config.properties")
-@EnableJpaRepositories(
-        basePackages = "com.bupjangsa.repository",
-        entityManagerFactoryRef = "masterEntityManager",
-        transactionManagerRef = "masterTransactionManager"
-)
-@RequiredArgsConstructor
+@EnableTransactionManagement
 public class DBConfig {
 
-    private final Environment env;
+    @Value("${spring.datasource.driverClassName}")
+    private String driverClassName;
+
+    @Value("${spring.datasource.jdbcUrl}")
+    private String url;
+
+    @Value("${spring.datasource.username}")
+    private String userName;
+
+    @Value("${spring.datasource.password}")
+    private String password;
+
+    @Autowired
+    private Environment env;
 
     @Bean
-    @Primary
+    public DataSource masterDataSource() {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName(driverClassName);
+        dataSource.setUrl(url);
+        dataSource.setUsername(userName);
+        dataSource.setPassword(password);
+        return dataSource;
+    }
+
+    @Bean
     public LocalContainerEntityManagerFactoryBean masterEntityManager() {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(masterDataSource());
@@ -51,14 +69,7 @@ public class DBConfig {
         return em;
     }
 
-    @Primary
-    @Bean
-    @ConfigurationProperties(prefix="spring.datasource")
-    public DataSource masterDataSource() {
-        return DataSourceBuilder.create().build();
-    }
 
-    @Primary
     @Bean
     public PlatformTransactionManager masterTransactionManager() {
         JpaTransactionManager transactionManager = new JpaTransactionManager();

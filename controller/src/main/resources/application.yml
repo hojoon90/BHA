@@ -8,12 +8,6 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
-  data:
-    maria:
-      jdbc-url: jdbc:mariadb://192.168.50.251:3306/BHA
-      driver-class-name: org.mariadb.jdbc.Driver
-      username: root
-      password: root
     jpa:
       properties:
         hibernate:

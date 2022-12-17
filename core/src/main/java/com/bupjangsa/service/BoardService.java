@@ -5,9 +5,11 @@ import com.bupjangsa.repository.CollectPersister;
 import com.bupjangsa.repository.SeekPersister;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class BoardService {
 
     private final SeekPersister seekPersister;
