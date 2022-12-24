@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -20,12 +22,26 @@ public class BoardService {
         collectPersister.postArticle(allBoard);
     }
 
-    public AllBoard selectBoard(String boardType, int boardNo){
-        return seekPersister.selectBoard(boardType, boardNo);
-    }
 
     @Transactional
     public void putArticle(AllBoard allBoard){
         collectPersister.putArticle(allBoard);
     }
+
+    @Transactional
+    public void deleteArticle(AllBoard allBoard){
+        collectPersister.deleteArticle(allBoard);
+    }
+
+    //단건 조회
+    public AllBoard selectArticle(String boardType, int boardNo){
+        return seekPersister.selectArticle(boardType, boardNo);
+    }
+
+    //게시물 목록 조회
+    public List<AllBoard> selectArticleList(String boardType){
+        //TODO 리스트 페이징. 게시물이 많아질때 처리 고민 필요.
+        return seekPersister.selectArticleList(boardType);
+    }
+
 }

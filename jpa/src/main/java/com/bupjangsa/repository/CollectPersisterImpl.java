@@ -51,4 +51,19 @@ public class CollectPersisterImpl implements CollectPersister{
                 .set(qallBoard.altDate, date)
                 .execute();
     }
+
+    @Override
+    public void deleteArticle(AllBoard allBoard) {
+        Date date = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+
+        QAllBoard qAllBoard = new QAllBoard("allBoard");
+
+        jpaQueryFactory.update(qAllBoard)
+                .where(qAllBoard.no.eq(allBoard.getNo()))
+                .where(qAllBoard.boardType.eq(allBoard.getBoardType()))
+                .set(qAllBoard.deleteYn, allBoard.getDeleteYn())
+                .set(qAllBoard.altDate, date)
+                .execute();
+
+    }
 }
