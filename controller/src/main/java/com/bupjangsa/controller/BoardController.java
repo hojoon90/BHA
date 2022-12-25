@@ -5,6 +5,7 @@ import com.bupjangsa.service.BoardService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/board/*")
@@ -38,7 +39,12 @@ public class BoardController {
     }
 
     @GetMapping(value = "/article/{boardType}")
-    public List<AllBoard> getArticleList(@PathVariable String boardType){
-        return boardService.selectArticleList(boardType);
+    public List<AllBoard> getArticleList(@PathVariable String boardType, @RequestParam Map<String, String> param){
+
+        int pageNo = Integer.parseInt(param.get("pageNo"));
+        int pageSize = Integer.parseInt(param.get("pageSize"));
+
+
+        return boardService.selectArticleList(boardType, pageNo, pageSize);
     }
 }

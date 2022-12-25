@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -39,9 +40,14 @@ public class BoardService {
     }
 
     //게시물 목록 조회
-    public List<AllBoard> selectArticleList(String boardType){
-        //TODO 리스트 페이징. 게시물이 많아질때 처리 고민 필요.
-        return seekPersister.selectArticleList(boardType);
+    public List<AllBoard> selectArticleList(String boardType, int pageNo, int pageSize){
+        // 리스트 페이징. TODO 게시물이 많아질때 처리 고민 필요.
+        List<AllBoard> boardList = seekPersister.selectArticleList(boardType);
+
+        return boardList.stream()
+                .skip(pageSize * (pageNo -1))
+                .limit(pageSize)
+                .collect(Collectors.toList());
     }
 
 }
