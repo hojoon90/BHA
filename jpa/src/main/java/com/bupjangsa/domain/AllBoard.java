@@ -13,9 +13,7 @@ import java.util.Date;
 
 @Data
 @Entity
-@Table(
-        name = "ALL_BOARD"
-)
+@Table(name = "ALL_BOARD")
 public class AllBoard {
 
     @Id
