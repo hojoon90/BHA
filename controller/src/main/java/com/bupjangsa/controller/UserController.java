@@ -14,7 +14,7 @@ public class UserController {
 
     //사용자 가입
     @PostMapping(value = "/userInfo")
-    public ResultMap registUser(){
+    public ResultMap registUser(@RequestParam UserInfo userInfo){
         resultMap = new ResultMap();
 
 
@@ -26,7 +26,7 @@ public class UserController {
 
     //회원정보 수정
     @PutMapping(value = "/userInfo")
-    public ResultMap updateUser(){
+    public ResultMap updateUser(@RequestParam UserInfo userInfo){
         resultMap = new ResultMap();
 
 
@@ -38,7 +38,7 @@ public class UserController {
 
     //회원 탈퇴
     @DeleteMapping(value = "/userInfo")
-    public ResultMap deleteUser(){
+    public ResultMap deleteUser(@RequestParam UserInfo userInfo){
         resultMap = new ResultMap();
 
         resultMap.setResultCode(200);
