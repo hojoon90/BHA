@@ -21,6 +21,11 @@ public class SecurityService {
         return "OK";
     }
 
+    public String updateUser(UserInfo userInfo){
+        //사용자 정보 수정
+
+        return "OK";
+    }
 
 
 }
