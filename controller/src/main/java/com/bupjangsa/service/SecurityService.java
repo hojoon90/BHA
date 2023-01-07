@@ -15,7 +15,9 @@ public class SecurityService {
     public String registUser(UserInfo userInfo){
         //TODO 사용자 가입 여부 판단
         // 패스워드 인코딩
+        userInfo.setSecretKey(passwordEncoder.encode(userInfo.getSecretKey()));
         // 사용자 등록
+        userService.registUser(userInfo);
         // 실패 시 실패 코드 전달.
 
         return "OK";

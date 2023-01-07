@@ -1,8 +1,9 @@
 package com.bupjangsa.config;
 
-import com.bupjangsa.repository.CollectPersisterImpl;
-import com.bupjangsa.repository.SeekPersisterImpl;
+import com.bupjangsa.repository.BoardPersisterImpl;
+import com.bupjangsa.repository.UserPersisterImpl;
 import com.bupjangsa.service.BoardService;
+import com.bupjangsa.service.UserService;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +19,12 @@ public class BHAConfig {
 
     @Bean
     public BoardService boardService(){
-        return new BoardService(new SeekPersisterImpl(jpaQueryFactory()), new CollectPersisterImpl(jpaQueryFactory(), em));
+        return new BoardService(new BoardPersisterImpl(jpaQueryFactory(), em));
+    }
+
+    @Bean
+    public UserService userService(){
+        return new UserService(new UserPersisterImpl(jpaQueryFactory(), em));
     }
 
     @Bean

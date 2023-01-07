@@ -9,9 +9,9 @@ import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 
-public class CollectPersisterImpl implements CollectPersister{
-
+public class BoardPersisterImpl implements BoardPersister {
 
     JPAQueryFactory jpaQueryFactory;
 
@@ -20,11 +20,31 @@ public class CollectPersisterImpl implements CollectPersister{
 
     LocalDateTime localDateTime = LocalDateTime.now();
 
-    public CollectPersisterImpl(JPAQueryFactory jpaQueryFactory, EntityManager entityManager){
+    public BoardPersisterImpl(JPAQueryFactory jpaQueryFactory, EntityManager entityManager){
         this.jpaQueryFactory = jpaQueryFactory;
         this.entityManager = entityManager;
     }
 
+    @Override
+    public AllBoard selectArticle(String boardType, int boardNo) {
+        QAllBoard qallBoard = new QAllBoard("allBoard");
+
+        return jpaQueryFactory.select(qallBoard)
+                .from(qallBoard)
+                .where(qallBoard.boardType.eq(boardType))
+                .where(qallBoard.no.eq(boardNo))
+                .fetchOne();
+    }
+
+    @Override
+    public List<AllBoard> selectArticleList(String boardType) {
+        QAllBoard qAllBoard = new QAllBoard("allBoard");
+
+        return jpaQueryFactory.select(qAllBoard)
+                .from(qAllBoard)
+                .where(qAllBoard.boardType.eq(boardType))
+                .fetch();
+    }
 
     @Override
     public void postArticle(AllBoard allBoard) {

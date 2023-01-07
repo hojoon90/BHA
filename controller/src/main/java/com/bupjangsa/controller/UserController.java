@@ -2,13 +2,18 @@ package com.bupjangsa.controller;
 
 import com.bupjangsa.domain.ResultMap;
 import com.bupjangsa.domain.UserInfo;
+import com.bupjangsa.service.SecurityService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/user/*")
+@RequiredArgsConstructor
 public class UserController {
 
     public ResultMap resultMap;
+
+    private final SecurityService securityService;
 
     //TODO SNS 가입 고민 필요.
 
@@ -17,6 +22,7 @@ public class UserController {
     public ResultMap registUser(@RequestParam UserInfo userInfo){
         resultMap = new ResultMap();
 
+        securityService.registUser(userInfo);
 
         resultMap.setResultCode(200);
         resultMap.setResultReason("OK");
