@@ -24,6 +24,8 @@ public class UserInfo {
     @Column(name = "SECRET_KEY", nullable = false)
     private String secretKey;
 
+    private String confirmSecretKey;
+
     @Column(name = "AUTHORITY", nullable = false)
     private String authority;
 
@@ -35,5 +37,7 @@ public class UserInfo {
 
     @Column(name = "ALT_DATE")
     private Date altDate;
+
+    //TODO 삭제 여부 추가
 
 }

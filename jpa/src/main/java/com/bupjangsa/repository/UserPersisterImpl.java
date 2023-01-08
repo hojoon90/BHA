@@ -25,4 +25,14 @@ public class UserPersisterImpl implements UserPersister{
     public void registUser(UserInfo userInfo) {
 
     }
+
+    @Override
+    public void updateUser(UserInfo userInfo) {
+
+    }
+
+    @Override
+    public UserInfo getUser(String userId) {
+        return null;
+    }
 }

@@ -19,6 +19,14 @@ public class UserService {
         return "";
     }
 
+    public String updateUser(UserInfo userInfo){
+        userPersister.updateUser(userInfo);
 
+        return "";
+    }
+
+    public UserInfo getUser(String userId){
+        return userPersister.getUser(userId);
+    }
 
 }
