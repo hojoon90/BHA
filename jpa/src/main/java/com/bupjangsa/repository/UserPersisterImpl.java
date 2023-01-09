@@ -6,6 +6,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 
 public class UserPersisterImpl implements UserPersister{
 
@@ -23,7 +25,13 @@ public class UserPersisterImpl implements UserPersister{
 
     @Override
     public void registUser(UserInfo userInfo) {
+        Date date = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
 
+        userInfo.setRegDate(date);
+
+        //queryDsl은 insert시엔 EntityManager를 사용한다.
+        entityManager.persist(userInfo);
+        entityManager.flush();
     }
 
     @Override
