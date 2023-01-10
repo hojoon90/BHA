@@ -20,7 +20,7 @@ public class UserController {
 
     //사용자 가입
     @PostMapping(value = "/userInfo")
-    public ResultMap registUser(@RequestParam UserInfo userInfo){
+    public ResultMap registUser(@RequestBody UserInfo userInfo){
         resultMap = new ResultMap();
 
         securityService.registUser(userInfo);
@@ -33,7 +33,7 @@ public class UserController {
 
     //회원정보 수정
     @PutMapping(value = "/userInfo")
-    public ResultMap updateUser(@RequestParam UserInfo userInfo){
+    public ResultMap updateUser(@RequestBody UserInfo userInfo){
         resultMap = new ResultMap();
 
         securityService.updateUser(userInfo);
@@ -47,7 +47,7 @@ public class UserController {
 
     //회원 탈퇴
     @DeleteMapping(value = "/userInfo")
-    public ResultMap deleteUser(@RequestParam UserInfo userInfo){
+    public ResultMap deleteUser(@RequestBody UserInfo userInfo){
         //회원탈퇴의 경우 탈퇴여부값만 변경해준다.
         resultMap = new ResultMap();
 
