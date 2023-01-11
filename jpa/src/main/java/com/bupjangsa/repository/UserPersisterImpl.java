@@ -29,6 +29,7 @@ public class UserPersisterImpl implements UserPersister{
 
         userInfo.setRegDate(date);
 
+
         //queryDsl은 insert시엔 EntityManager를 사용한다.
         entityManager.persist(userInfo);
         entityManager.flush();
