@@ -1,5 +1,7 @@
 package com.bupjangsa.repository;
 
+import com.bupjangsa.domain.QAllBoard;
+import com.bupjangsa.domain.QUserInfo;
 import com.bupjangsa.domain.UserInfo;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -29,19 +31,31 @@ public class UserPersisterImpl implements UserPersister{
 
         userInfo.setRegDate(date);
 
-
-        //queryDsl은 insert시엔 EntityManager를 사용한다.
         entityManager.persist(userInfo);
         entityManager.flush();
     }
 
     @Override
     public void updateUser(UserInfo userInfo) {
+        Date date = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
 
+        QUserInfo qUserInfo = new QUserInfo("userInfo");
+
+        jpaQueryFactory.update(qUserInfo)
+                .where(qUserInfo.userId.eq(userInfo.getUserId()))
+                .set(qUserInfo.secretKey, userInfo.getSecretKey())
+                .set(qUserInfo.email, userInfo.getEmail())
+                .set(qUserInfo.altDate, date)
+                .execute();
     }
 
     @Override
     public UserInfo getUser(String userId) {
-        return null;
+        QUserInfo qUserInfo = new QUserInfo("userInfo");
+
+        return jpaQueryFactory.select(qUserInfo)
+                .from(qUserInfo)
+                .where(qUserInfo.userId.eq(userId))
+                .fetchOne();
     }
 }
