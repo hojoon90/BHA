@@ -16,7 +16,7 @@ public class BoardService {
 
     private final BoardPersister boardPersister;
 
-    @Transactional  //Transaction은 비즈니스가 시작하는 위치에 놓는게 제일 좋다. 자세한 내용은 정리 후 올릴 예정.
+    @Transactional
     public void postArticle(AllBoard allBoard){
         boardPersister.postArticle(allBoard);
     }
