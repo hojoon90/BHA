@@ -62,7 +62,7 @@ public class UserController {
     //회원 조회
     //TODO 필요한 회원 정보 정의 필요.
     @GetMapping(value = "/userInfo")
-    public UserInfo getUser(
+    public ResultMap getUser(
             @ApiParam(name = "userId", value = "사용자 아이디", example = "test" ) String userId
     ){
         resultMap = new ResultMap();
@@ -71,7 +71,7 @@ public class UserController {
 
         resultMap.setResultCode(200);
         resultMap.setResultReason("OK");
-        return null;
+        return resultMap;
     }
 
 }

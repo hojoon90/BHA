@@ -1,6 +1,5 @@
 package com.bupjangsa.repository;
 
-import com.bupjangsa.domain.QAllBoard;
 import com.bupjangsa.domain.QUserInfo;
 import com.bupjangsa.domain.UserInfo;
 import com.querydsl.jpa.impl.JPAQueryFactory;
