@@ -14,15 +14,27 @@ public class UserService {
     private final UserPersister userPersister;
 
     public String registUser(UserInfo userInfo){
-        userPersister.registUser(userInfo);
+        String result = "";
+        try{
+            userPersister.registUser(userInfo);
+            result = "Success";
+        }catch(Exception e){
+            result = "Fail";
+        }
 
-        return "";
+        return result;
     }
 
     public String updateUser(UserInfo userInfo){
-        userPersister.updateUser(userInfo);
+        String result = "";
+        try{
+            userPersister.updateUser(userInfo);
+            result = "Success";
+        }catch(Exception e){
+            result = "Fail";
+        }
 
-        return "";
+        return result;
     }
 
     public UserInfo getUser(String userId){
