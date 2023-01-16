@@ -14,7 +14,7 @@ public class UserService {
     private final UserPersister userPersister;
 
     public String registUser(UserInfo userInfo){
-        String result = "";
+        String result;
         try{
             userPersister.registUser(userInfo);
             result = "Success";
@@ -26,7 +26,7 @@ public class UserService {
     }
 
     public String updateUser(UserInfo userInfo){
-        String result = "";
+        String result;
         try{
             userPersister.updateUser(userInfo);
             result = "Success";
