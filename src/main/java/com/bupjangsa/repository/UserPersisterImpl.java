@@ -4,8 +4,8 @@ import com.bupjangsa.domain.QUserInfo;
 import com.bupjangsa.domain.UserInfo;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
