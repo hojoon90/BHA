@@ -1,5 +1,5 @@
 rootProject.name = 'BHA'
-include 'controller'
-include 'core'
-include 'jpa'
+include("bha-api")
+include("bha-core")
+include 'bha-security'
 
