@@ -26,6 +26,7 @@ public class SearchBoardRepositoryImpl implements SearchBoardRepository {
                 .fetchOne();
     }
 
+
     @Override
     public List<AllBoard> selectArticleList(String boardType) {
         QAllBoard qAllBoard = new QAllBoard("allBoard");
