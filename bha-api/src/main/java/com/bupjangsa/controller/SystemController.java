@@ -8,7 +8,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 @RestController
-@RequestMapping(value = "/system")
+@RequestMapping(value = "/api/v1/system")
 public class SystemController {
 
     @GetMapping(value = "/check")

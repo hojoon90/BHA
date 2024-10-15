@@ -9,8 +9,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SecurityService {
     private final PasswordEncoder passwordEncoder;
-    private final UserService userService;
+//    private final UserService userService;
 
+    public final String encodePassword(String password){
+        return passwordEncoder.encode(password);
+    }
 
     public String registUser(UserInfo userInfo){
         //TODO 사용자 가입 여부 판단

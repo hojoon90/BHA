@@ -1,10 +1,12 @@
 package com.bupjangsa.service;
 
-import com.bupjangsa.domain.user.UserInfo;
+import com.bupjangsa.domain.user.User;
 import com.bupjangsa.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 /**
  * Repository 에서 데이터 처리 후 DTO를 리턴합니다.
@@ -17,36 +19,25 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public String registUser(UserInfo userInfo){
-        String result;
-        try{
-            userRepository.save(userInfo);
-            result = "Success";
-        }catch(Exception e){
-            result = "Fail";
+    public void registUser(User user){
+        Optional<User> userInfo = userRepository.findByUserId(user.getUserId());
+        if(userInfo.isPresent()){
+            //TODO 예외 정리
+            throw new RuntimeException("이미 존재하는 유저");
         }
 
-        return result;
+        userRepository.save(user);
     }
 
-    public String updateUser(UserInfo userInfo){
-        String result;
-        try{
-            userRepository.findById(Long.parseLong(userInfo.getUserId()))
-                    .orElseThrow(() -> new RuntimeException(""));
+    public void updateUser(User user){
 
-            //TODO 업데이트 로직 추가
+        userRepository.findById(Long.parseLong(user.getUserId()))
+                .orElseThrow(() -> new RuntimeException(""));
 
-            result = "Success";
-        }catch(Exception e){
-            result = "Fail";
-        }
-
-        return result;
     }
 
-    public UserInfo getUser(String userId){
-        return userRepository.findById(Long.parseLong(userId)).orElseThrow(() -> new RuntimeException(""));
+    public Optional<User> findUser(Long userId){
+        return Optional.of(userRepository.findById(userId).orElseThrow(() -> new RuntimeException("")));
     }
 
 }

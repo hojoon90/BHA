@@ -1,6 +1,6 @@
 package com.bupjangsa.service;
 
-import com.bupjangsa.domain.board.AllBoard;
+import com.bupjangsa.domain.board.Board;
 import com.bupjangsa.domain.board.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,30 +17,31 @@ public class BoardService {
     private final BoardRepository boardRepository;
 
     @Transactional
-    public void postArticle(AllBoard allBoard){
-        boardRepository.save(allBoard);
+    public void postArticle(Board board){
+        boardRepository.save(board);
     }
 
 
     @Transactional
-    public void putArticle(AllBoard allBoard){
-        boardRepository.putArticle(allBoard);
+    public void putArticle(Board board){
+
+        boardRepository.putArticle(board);
     }
 
     @Transactional
-    public void deleteArticle(AllBoard allBoard){
-        boardRepository.deleteArticle(allBoard);
+    public void deleteArticle(Board board){
+        boardRepository.deleteArticle(board);
     }
 
     //단건 조회
-    public AllBoard selectArticle(String boardType, int boardNo){
+    public Board selectArticle(String boardType, int boardNo){
         return boardRepository.selectArticle(boardType, boardNo);
     }
 
     //게시물 목록 조회
-    public List<AllBoard> selectArticleList(String boardType, int pageNo, int pageSize){
+    public List<Board> selectArticleList(String boardType, int pageNo, int pageSize){
         // 리스트 페이징. TODO 게시물이 많아질때 처리 고민 필요.
-        List<AllBoard> boardList = boardRepository.selectArticleList(boardType);
+        List<Board> boardList = boardRepository.selectArticleList(boardType);
 
         return boardList.stream()
                 .skip(pageSize * (pageNo -1))

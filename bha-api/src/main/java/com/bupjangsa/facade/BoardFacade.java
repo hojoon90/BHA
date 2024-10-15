@@ -16,4 +16,8 @@ public class BoardFacade {
 
     private final BoardService boardService;
 
+    public void postArticle(){
+
+    }
+
 }

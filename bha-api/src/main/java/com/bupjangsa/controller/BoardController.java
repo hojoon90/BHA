@@ -1,71 +1,45 @@
 package com.bupjangsa.controller;
 
-import com.bupjangsa.domain.board.AllBoard;
-import com.bupjangsa.domain.ResultMap;
+import com.bupjangsa.common.CommonResponse;
+import com.bupjangsa.domain.board.Board;
 import com.bupjangsa.facade.BoardFacade;
-import com.bupjangsa.service.BoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/board")
+@RequestMapping(value = "api/v1/board")
 @RequiredArgsConstructor
 public class BoardController {
 
     private final BoardFacade boardFacade;
-    ResultMap resultMap;
 
     @PostMapping(value = "/article")
-    public ResultMap postArticle(@RequestBody AllBoard allBoard){
-        resultMap = new ResultMap();
-        //TODO 예외처리
-        boardFacade.postArticle(allBoard);
-
-        resultMap.setResultCode(200);
-        resultMap.setResultReason("OK");
-
-        return resultMap;
+    public ResponseEntity<CommonResponse> postArticle(@RequestBody final Board board){
+        return ResponseEntity.status(HttpStatus.CREATED).body(boardFacade.postArticle(board));
     }
 
     @PutMapping(value = "/article")
-    public ResultMap putArticle(@RequestBody AllBoard allBoard){
-        resultMap = new ResultMap();
-        //TODO 예외처리
-        boardFacade.putArticle(allBoard);
-
-        resultMap.setResultCode(200);
-        resultMap.setResultReason("OK");
-
-        return resultMap;
+    public ResponseEntity<CommonResponse> putArticle(@RequestBody Board board){
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(boardFacade.putArticle(board));
     }
 
     @DeleteMapping(value = "/article")
-    public ResultMap deleteArticle(@RequestBody AllBoard allBoard){
-        resultMap = new ResultMap();
-        //TODO 예외처리
-        // 게시물 삭제이지만 DB 상에서는 deleteYn 값을 Y로만 변경해준다.
-        boardFacade.deleteArticle(allBoard);
-
-        resultMap.setResultCode(200);
-        resultMap.setResultReason("OK");
-
-        return resultMap;
+    public ResponseEntity<CommonResponse> deleteArticle(@RequestBody Board board){
+        return ResponseEntity.status(HttpStatus.OK).body(boardFacade.deleteArticle(board));
     }
 
     @GetMapping(value = "/article/{boardType}/{boardNo}")
-    public AllBoard getArticle(@PathVariable String boardType, @PathVariable int boardNo){
-        return boardFacade.selectArticle(boardType, boardNo);
+    public ResponseEntity<CommonResponse<Board>>  getArticle(@PathVariable String boardType,
+                                                             @PathVariable int boardNo){
+        return ResponseEntity.status(HttpStatus.OK).body(boardFacade.selectArticle(boardType, boardNo));
     }
 
     @GetMapping(value = "/article/{boardType}")
-    public List<AllBoard> getArticleList(@PathVariable String boardType, @RequestParam Map<String, String> param){
-
-        int pageNo = Integer.parseInt(param.get("pageNo"));
-        int pageSize = Integer.parseInt(param.get("pageSize"));
-
-        return boardFacade.selectArticleList(boardType, pageNo, pageSize);
+    public ResponseEntity<CommonResponse<List<Board>>>  getArticleList(@PathVariable String boardType){
+        return ResponseEntity.status(HttpStatus.OK).body(boardFacade.selectArticleList(boardType, pageNo, pageSize));
     }
 }
