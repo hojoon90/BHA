@@ -48,12 +48,12 @@ project(':bha-api') { // 컴파일 시 multi-module-database 로딩
     }
 }
 
-project(':bha-security') { // 컴파일 시 multi-module-database 로딩
+project(':bha-security') {
     bootJar.enabled = false
     jar.enabled = true
 }
 
-project(':bha-core') { // 컴파일 시 multi-module-database 로딩
+project(':bha-core') {
     bootJar.enabled = false
     jar.enabled = true
 }

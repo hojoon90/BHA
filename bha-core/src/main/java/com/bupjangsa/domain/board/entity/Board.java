@@ -1,7 +1,8 @@
-package com.bupjangsa.domain.board;
+package com.bupjangsa.domain.board.entity;
 
 
-import com.bupjangsa.domain.BaseEntity;
+import com.bupjangsa.domain.common.BaseEntity;
+import com.bupjangsa.domain.board.BoardType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,7 +17,7 @@ public class Board extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long postId;
 
     @Column(nullable = false)
     private BoardType boardType;
@@ -27,6 +28,7 @@ public class Board extends BaseEntity {
     @Column(nullable = false)
     private String content;
 
+    @Column(nullable = false)
     private String createdBy;
 
     private String updatedBy;

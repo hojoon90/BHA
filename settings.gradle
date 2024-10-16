@@ -1,5 +1,5 @@
 rootProject.name = 'BHA'
-include("bha-api")
-include("bha-core")
+include 'bha-api'
+include 'bha-core'
 include 'bha-security'
 

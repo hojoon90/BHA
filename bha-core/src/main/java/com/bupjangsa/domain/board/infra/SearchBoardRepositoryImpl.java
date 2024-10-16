@@ -1,14 +1,10 @@
-package com.bupjangsa.domain.board;
+package com.bupjangsa.domain.board.infra;
 
+import com.bupjangsa.domain.board.entity.Board;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
-
-import static com.bupjangsa.domain.board.QBoard.*;
 
 @RequiredArgsConstructor
 public class SearchBoardRepositoryImpl implements SearchBoardRepository {

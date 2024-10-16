@@ -1,53 +1,142 @@
 package com.bupjangsa.service;
 
-import com.bupjangsa.domain.user.UserInfo;
-import lombok.RequiredArgsConstructor;
+import com.bupjangsa.dto.AppUserDetails;
+import com.bupjangsa.dto.JwtDto;
+import com.bupjangsa.exception.AuthorizeException;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import jakarta.servlet.http.HttpServletRequest;
 
+
+import java.security.Key;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.Optional;
+
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
+
+@Slf4j
 @Service
-@RequiredArgsConstructor
 public class SecurityService {
+    private static final String ACCESS_HEADER = "Authorization";
+    private static final String BEARER = "Bearer ";
+
     private final PasswordEncoder passwordEncoder;
-//    private final UserService userService;
+    private final Key secretKey;
+
+    /**
+     * JWT의 Subject는 사용자의 이름, Claim에 id 세팅 -> JWT의 헤더에 들어오는 값 :
+     * 'Authorization(Key) = Bearer {토큰} (Value)' 형식
+     */
+    public SecurityService(@Value("${secret.key.jwt}") String tokenKey, PasswordEncoder passwordEncoder) {
+        byte[] keyBites = Decoders.BASE64.decode(tokenKey);
+        this.secretKey = Keys.hmacShaKeyFor(keyBites);
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public final String encodePassword(String password){
         return passwordEncoder.encode(password);
     }
 
-    public String registUser(UserInfo userInfo){
-        //TODO 사용자 가입 여부 판단
-        UserInfo originUser = this.selectUserInfo(userInfo.getUserId());
-        if(originUser != null) return "Exist User";
-        // 패스워드 인코딩
-        userInfo.setSecretKey(passwordEncoder.encode(userInfo.getSecretKey()));
-        // 사용자 등록
-        userService.registUser(userInfo);
-        // 실패 시 실패 코드 전달.
-
-        return "OK";
+    public final boolean checkUserValidation(String rawPassword, String password){
+        return passwordEncoder.matches(rawPassword, password);
     }
 
-    public String updateUser(UserInfo userInfo){
-        //사용자 정보 수정
-        String newPassword = "";
-        if(userInfo.getSecretKey() != null && !userInfo.getSecretKey().equals(""))
-            newPassword = passwordEncoder.encode(userInfo.getSecretKey());
+    @Transactional
+    public JwtDto.Tokens getTokens(Long userId, String accountId){
 
-        if(!newPassword.equals("")){
-            UserInfo originUser = this.selectUserInfo(userInfo.getUserId());
-            String pastPassword = originUser.getSecretKey();
+        String accessToken = this.createAccessToken(userId, accountId);
+        String refreshToken = this.createRefreshToken(accountId);
 
-            if(!pastPassword.equals(newPassword)) userInfo.setSecretKey(newPassword);
+        return JwtDto.Tokens.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
+
+    }
+
+    public String createAccessToken(Long userId, String accountId) {
+
+        LocalDateTime now = LocalDateTime.now();
+        Date accessTokenExpiresIn = Timestamp.valueOf(now.plusDays(1));
+
+        Claims claims = Jwts.claims()
+                .setSubject(String.valueOf(userId));
+        claims.put("accountId", accountId);
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setExpiration(accessTokenExpiresIn)
+                .signWith(secretKey, SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    public String createRefreshToken(String accountId){
+        LocalDateTime now = LocalDateTime.now();
+        Date accessTokenExpiresIn = Timestamp.valueOf(now.plusDays(14));
+
+        Claims claims = Jwts.claims();
+        claims.put("accountId", accountId);
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setExpiration(accessTokenExpiresIn)
+                .signWith(secretKey, SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    /**
+     * 헤더에서 AccessToken 추출 토큰 형식 : Bearer XXX에서 Bearer를 제외하고 순수 토큰만 가져오기 위해서 헤더를 가져온 후 "Bearer"를
+     * 삭제(""로 replace)
+     */
+    public Optional<String> extractAccessToken(HttpServletRequest request) {
+        return Optional.of(request.getHeader(ACCESS_HEADER))
+                .filter(accessToken -> accessToken.startsWith(BEARER))
+                .map(accessToken -> accessToken.replace(BEARER, ""));
+    }
+
+    public Optional<UserDetails> getUserDetails(String accessToken) {
+        try {
+
+            Claims body = Jwts.parserBuilder()
+                    .setSigningKey(secretKey)
+                    .build()
+                    .parseClaimsJws(accessToken)
+                    .getBody();
+
+            Long userId = Long.valueOf(String.valueOf(body.get("sub")));
+            String accountId = String.valueOf(body.get("userId"));
+//            String idTypeStr = String.valueOf(body.get("idType"));
+
+
+            return Optional.ofNullable(AppUserDetails.valueOf(userId, accountId));
+        } catch (Exception e) {
+            log.error("액세스 토큰이 유효하지 않습니다.");
+            return Optional.empty();
         }
-
-        userService.updateUser(userInfo);
-
-        return "OK";
     }
 
-    public UserInfo selectUserInfo(String userId){
-        return userService.getUser(userId);
+    public boolean isTokenValid(String token) {
+        try {
+            Jwts.parserBuilder()
+                    .setSigningKey(secretKey)
+                    .build()
+                    .parseClaimsJws(token);
+            return true;
+        } catch (Exception e) {
+            log.error("유효하지 않은 토큰입니다. {}", e.getMessage());
+            throw new AuthorizeException("액세스 토큰이 유효하지 않습니다.");
+        }
     }
 
 

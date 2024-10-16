@@ -1,7 +1,7 @@
 package com.bupjangsa.service;
 
-import com.bupjangsa.domain.board.Board;
-import com.bupjangsa.domain.board.BoardRepository;
+import com.bupjangsa.domain.board.entity.Board;
+import com.bupjangsa.domain.board.infra.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,13 +24,12 @@ public class BoardService {
 
     @Transactional
     public void putArticle(Board board){
-
-        boardRepository.putArticle(board);
+        boardRepository.findById(board.getPostId());
     }
 
     @Transactional
     public void deleteArticle(Board board){
-        boardRepository.deleteArticle(board);
+        boardRepository.delete(board);
     }
 
     //단건 조회

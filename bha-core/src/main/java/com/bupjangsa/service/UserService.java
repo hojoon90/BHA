@@ -1,7 +1,9 @@
 package com.bupjangsa.service;
 
-import com.bupjangsa.domain.user.User;
-import com.bupjangsa.domain.user.UserRepository;
+import com.bupjangsa.domain.user.dto.UserDto;
+import com.bupjangsa.domain.user.entity.User;
+import com.bupjangsa.domain.user.infra.UserRepository;
+import com.bupjangsa.exception.UserDataException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,25 +21,43 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public void registUser(User user){
-        Optional<User> userInfo = userRepository.findByUserId(user.getUserId());
+    @Transactional
+    public void registerUser(UserDto.Register userDto){
+        User user = userDto.toEntity();
+        Optional<User> userInfo = userRepository.findByAccountId(user.getAccountId());
         if(userInfo.isPresent()){
-            //TODO 예외 정리
-            throw new RuntimeException("이미 존재하는 유저");
+            throw new UserDataException("이미 존재하는 유저입니다.");
         }
 
         userRepository.save(user);
     }
 
-    public void updateUser(User user){
+    @Transactional
+    public void updateUser(UserDto.Update userDto){
+        User user = userRepository.findById(userDto.getId())
+                .orElseThrow(() -> new UserDataException("유저를 조회할 수 없습니다."));
 
-        userRepository.findById(Long.parseLong(user.getUserId()))
-                .orElseThrow(() -> new RuntimeException(""));
-
+        user.updateUserData(userDto);
     }
 
-    public Optional<User> findUser(Long userId){
-        return Optional.of(userRepository.findById(userId).orElseThrow(() -> new RuntimeException("")));
+    public UserDto.UserInfo findUser(Long id){
+        return userRepository.findById(id)
+                .map(UserDto.UserInfo::of)
+                .orElseThrow(() -> new UserDataException("유저를 조회할 수 없습니다."));
+    }
+
+    public UserDto.UserInfo findUserByAccountId(String userId){
+        return userRepository.findByAccountId(userId)
+                .map(UserDto.UserInfo::of)
+                .orElseThrow(() -> new UserDataException("유저를 조회할 수 없습니다."));
+    }
+
+    @Transactional
+    public void deleteUser(Long id){
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserDataException("유저를 조회할 수 없습니다."));
+        user.updateSignOutDate();
+        userRepository.delete(user);
     }
 
 }

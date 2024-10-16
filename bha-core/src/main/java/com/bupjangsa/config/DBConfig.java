@@ -18,64 +18,64 @@ import javax.sql.DataSource;
 import java.util.HashMap;
 
 
-@Configuration
-@PropertySource(value = "classpath:jpa-config.yml")
-@EnableTransactionManagement
-@RequiredArgsConstructor
+//@Configuration
+//@PropertySource(value = "classpath:jpa-config.yml")
+//@EnableTransactionManagement
+//@RequiredArgsConstructor
 public class DBConfig {
 
-    @Value("${spring.datasource.driver-class-name}")
-    private String driverClassName;
-
-    @Value("${spring.datasource.url}")
-    private String url;
-
-    @Value("${spring.datasource.username}")
-    private String userName;
-
-    @Value("${spring.datasource.password}")
-    private String password;
-
-    private final Environment env;
-
-
-
-    @Bean
-    public DataSource masterDataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(driverClassName);
-        dataSource.setUrl(url);
-        dataSource.setUsername(userName);
-        dataSource.setPassword(password);
-        return dataSource;
-    }
-
-    @Bean
-    public LocalContainerEntityManagerFactoryBean masterEntityManager() {
-        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-        em.setDataSource(masterDataSource());
-
-        //Entity 패키지 경로
-        em.setPackagesToScan(new String[] { "com.bupjangsa.domain" });
-
-        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        em.setJpaVendorAdapter(vendorAdapter);
-
-        //Hibernate 설정
-        HashMap<String, Object> properties = new HashMap<>();
-        properties.put("hibernate.hbm2ddl.auto",env.getProperty("hibernate.hbm2ddl.auto"));
-        properties.put("hibernate.dialect",env.getProperty("hibernate.dialect"));
-        em.setJpaPropertyMap(properties);
-        return em;
-    }
-
-
-    @Bean
-    public PlatformTransactionManager masterTransactionManager() {
-        JpaTransactionManager transactionManager = new JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(masterEntityManager().getObject());
-        return transactionManager;
-    }
+//    @Value("${spring.datasource.driver-class-name}")
+//    private String driverClassName;
+//
+//    @Value("${spring.datasource.url}")
+//    private String url;
+//
+//    @Value("${spring.datasource.username}")
+//    private String userName;
+//
+//    @Value("${spring.datasource.password}")
+//    private String password;
+//
+//    private final Environment env;
+//
+//
+//
+//    @Bean
+//    public DataSource masterDataSource() {
+//        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+//        dataSource.setDriverClassName(driverClassName);
+//        dataSource.setUrl(url);
+//        dataSource.setUsername(userName);
+//        dataSource.setPassword(password);
+//        return dataSource;
+//    }
+//
+//    @Bean
+//    public LocalContainerEntityManagerFactoryBean masterEntityManager() {
+//        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+//        em.setDataSource(masterDataSource());
+//
+//        //Entity 패키지 경로
+//        em.setPackagesToScan("com.bupjangsa.domain");
+//
+//        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+//        em.setJpaVendorAdapter(vendorAdapter);
+//
+//        //Hibernate 설정
+//        HashMap<String, Object> properties = new HashMap<>();
+//        properties.put("hibernate.hbm2ddl.auto",env.getProperty("hibernate.hbm2ddl.auto"));
+//        properties.put("hibernate.dialect",env.getProperty("hibernate.dialect"));
+//        em.setJpaPropertyMap(properties);
+//        return em;
+//    }
+//
+//
+//    @Bean
+//    public PlatformTransactionManager masterTransactionManager() {
+//        JpaTransactionManager transactionManager = new JpaTransactionManager();
+//        transactionManager.setEntityManagerFactory(masterEntityManager().getObject());
+//        return transactionManager;
+//    }
 
 
 }

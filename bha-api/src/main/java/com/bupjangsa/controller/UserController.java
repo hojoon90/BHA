@@ -1,13 +1,17 @@
 package com.bupjangsa.controller;
 
-import com.bupjangsa.common.CommonResponse;
-import com.bupjangsa.domain.user.User;
-import com.bupjangsa.dto.UserDto;
+import com.bupjangsa.common.AppResponse;
+import com.bupjangsa.dto.AppUserDetails;
 import com.bupjangsa.facade.UserFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import static com.bupjangsa.dto.request.UserRequest.*;
+import static com.bupjangsa.dto.response.UserResponse.TokenResponse;
+import static com.bupjangsa.dto.response.UserResponse.UserInfo;
 
 @RestController
 @RequestMapping(value = "/api/v1/user")
@@ -18,39 +22,55 @@ public class UserController {
 
     //사용자 가입
     @PostMapping
-    public ResponseEntity<CommonResponse> registUser(@RequestBody final UserDto.RegisterRequest request){
+    public ResponseEntity<AppResponse<Void>> registUser(
+            @RequestBody final RegisterRequest request
+    ) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(userFacade.registUser(request));
     }
 
-    @GetMapping(value = "/login")
-    public ResponseEntity<CommonResponse<User>> getUser(@PathVariable Long userNo){
+    /**
+     * 회원 로그인
+     *
+     * @param request
+     * @return
+     */
+    @PostMapping(value = "/login")
+    public ResponseEntity<AppResponse<TokenResponse>> getUser(
+            @RequestBody LoginRequest request
+    ) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(userFacade.selectUserInfo(userNo));
+                .body(userFacade.login(request));
     }
 
 
     //회원정보 수정
     @PutMapping
-    public ResponseEntity<CommonResponse> updateUser(@RequestBody final UserDto.UpdateRequest request){
+    public ResponseEntity<AppResponse<Void>> updateUser(
+            @AuthenticationPrincipal AppUserDetails user,
+            @RequestBody final UpdateRequest request
+    ) {
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
-                .body(userFacade.updateUser(0L, request));
+                .body(userFacade.updateUser(user.getUserId(), request));
     }
 
     //회원 탈퇴
     @DeleteMapping
-    public ResponseEntity<CommonResponse> deleteUser(@RequestBody User user){
+    public ResponseEntity<AppResponse<Void>> deleteUser(
+            @AuthenticationPrincipal AppUserDetails user
+    ) {
         //회원탈퇴의 경우 탈퇴여부값만 변경해준다.
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
-                .body(userFacade.updateUser(user));
+                .body(userFacade.deleteUser(user.getUserId()));
     }
 
     //회원 조회
-    //TODO 필요한 회원 정보 정의 필요.
-    @GetMapping(value = "/{userNo}")
-    public ResponseEntity<CommonResponse<User>> getUser(@PathVariable Long userNo){
+    @GetMapping
+    public ResponseEntity<AppResponse<UserInfo>> getUser(
+            @AuthenticationPrincipal AppUserDetails user
+    ) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(userFacade.selectUserInfo(userNo));
+                .body(userFacade.findUser(user.getUserId()));
     }
 
 }

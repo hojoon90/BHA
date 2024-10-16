@@ -1,8 +1,8 @@
 dependencies {
 
-
     // security 관련 의존성
-    implementation 'org.springframework.boot:spring-boot-starter-security'
+    api 'org.springframework.boot:spring-boot-starter-security'
+    compileOnly 'org.springframework.boot:spring-boot-starter-web'  //컴파일 시에만 필요. 런타임엔 이미 존재하는 라이브러리므로 compileOnly로 처리
 
     // jwt 관련 의존성
     implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'

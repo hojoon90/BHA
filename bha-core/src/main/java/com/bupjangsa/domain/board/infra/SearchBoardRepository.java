@@ -1,4 +1,6 @@
-package com.bupjangsa.domain.board;
+package com.bupjangsa.domain.board.infra;
+
+import com.bupjangsa.domain.board.entity.Board;
 
 import java.util.List;
 

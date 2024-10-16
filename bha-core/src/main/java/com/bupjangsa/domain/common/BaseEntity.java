@@ -1,4 +1,4 @@
-package com.bupjangsa.domain;
+package com.bupjangsa.domain.common;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
