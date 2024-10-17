@@ -1,16 +1,13 @@
 package com.bupjangsa.facade;
 
 import com.bupjangsa.common.AppResponse;
-import com.bupjangsa.domain.board.BoardType;
+import com.bupjangsa.domain.board.type.BoardType;
 import com.bupjangsa.domain.board.dto.BoardCriteria;
 import com.bupjangsa.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 import static com.bupjangsa.domain.board.dto.BoardDto.*;
 import static com.bupjangsa.dto.request.BoardRequest.*;

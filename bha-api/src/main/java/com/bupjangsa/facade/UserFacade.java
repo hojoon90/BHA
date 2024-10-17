@@ -4,7 +4,8 @@ import com.bupjangsa.common.AppResponse;
 import com.bupjangsa.domain.user.dto.UserDto;
 import com.bupjangsa.dto.JwtDto;
 import com.bupjangsa.exception.AuthorizeException;
-import com.bupjangsa.service.SecurityService;
+import com.bupjangsa.service.BhaSecurityService;
+import com.bupjangsa.service.PasswordComponent;
 import com.bupjangsa.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,8 @@ import static com.bupjangsa.dto.response.UserResponse.*;
 public class UserFacade {
 
     private final UserService userService;
-    private final SecurityService securityService;
+    private final BhaSecurityService bhaSecurityService;
+    private final PasswordComponent passwordComponent;
 
     /**
      * 회원 가입 메서드
@@ -36,7 +38,7 @@ public class UserFacade {
     @Transactional
     public AppResponse<Void> registUser(RegisterRequest request){
 
-        String encodePassword = securityService.encodePassword(request.getPassword());
+        String encodePassword = passwordComponent.encodePassword(request.getPassword());
         UserDto.Register dto = UserDto.Register.builder()
                 .accountId(request.getAccountId())
                 .password(encodePassword)
@@ -96,10 +98,10 @@ public class UserFacade {
     public AppResponse<TokenResponse> login(LoginRequest request){
 
         UserDto.UserInfo userByUserId = userService.findUserByAccountId(request.getAccountId());
-        boolean checkPassword = securityService.checkUserValidation(request.getPassword(), userByUserId.getPassword());
+        boolean checkPassword = passwordComponent.checkUserValidation(request.getPassword(), userByUserId.getPassword());
         if(!checkPassword) throw new AuthorizeException("패스워드가 맞지 않습니다.");
 
-        JwtDto.Tokens tokens = securityService.getTokens(userByUserId.getUserId(), userByUserId.getAccountId());
+        JwtDto.Tokens tokens = bhaSecurityService.getTokens(userByUserId.getUserId(), userByUserId.getAccountId());
         return AppResponse.responseSuccess(TokenResponse.from(tokens));
     }
 

@@ -22,8 +22,8 @@ public abstract class BaseEntity {
     private LocalDateTime createdAt;
 
     @LastModifiedDate
-    @Column(nullable = false)
-    private LocalDateTime updatedAt;
+    @Column
+    private LocalDateTime lastModifiedAt;
 
     public void deleteEntity() {
         this.deleted = Boolean.TRUE;

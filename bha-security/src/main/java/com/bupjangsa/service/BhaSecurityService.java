@@ -8,14 +8,14 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import jakarta.servlet.http.HttpServletRequest;
-
 
 import java.security.Key;
 import java.sql.Timestamp;
@@ -23,33 +23,20 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Optional;
 
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
-
 @Slf4j
 @Service
-public class SecurityService {
+public class BhaSecurityService {
     private static final String ACCESS_HEADER = "Authorization";
     private static final String BEARER = "Bearer ";
-
-    private final PasswordEncoder passwordEncoder;
     private final Key secretKey;
 
     /**
      * JWT의 Subject는 사용자의 이름, Claim에 id 세팅 -> JWT의 헤더에 들어오는 값 :
      * 'Authorization(Key) = Bearer {토큰} (Value)' 형식
      */
-    public SecurityService(@Value("${secret.key.jwt}") String tokenKey, PasswordEncoder passwordEncoder) {
+    public BhaSecurityService(@Value("${secret.key.jwt}") String tokenKey) {
         byte[] keyBites = Decoders.BASE64.decode(tokenKey);
         this.secretKey = Keys.hmacShaKeyFor(keyBites);
-        this.passwordEncoder = passwordEncoder;
-    }
-
-    public final String encodePassword(String password){
-        return passwordEncoder.encode(password);
-    }
-
-    public final boolean checkUserValidation(String rawPassword, String password){
-        return passwordEncoder.matches(rawPassword, password);
     }
 
     @Transactional

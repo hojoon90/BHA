@@ -2,7 +2,7 @@ package com.bupjangsa.domain.board.entity;
 
 
 import com.bupjangsa.domain.common.BaseEntity;
-import com.bupjangsa.domain.board.BoardType;
+import com.bupjangsa.domain.board.type.BoardType;
 import com.bupjangsa.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -34,11 +34,12 @@ public class Board extends BaseEntity {
     @Lob
     private String contents;
 
-    @Column(nullable = false)
     @ManyToOne
+    @JoinColumn(name = "created_by")
     private User createdBy;
 
     @ManyToOne
+    @JoinColumn(name = "last_modified_by")
     private User lastModifiedBy;
 
     public void updateBoardData(String title, String contetns, User user){

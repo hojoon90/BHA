@@ -1,6 +1,6 @@
 package com.bupjangsa.filter;
 
-import com.bupjangsa.service.SecurityService;
+import com.bupjangsa.service.BhaSecurityService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,29 +21,26 @@ import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
-public class AuthenticationFilter extends OncePerRequestFilter {
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private static final List<String> NO_CHECK_URL =
-            Arrays.asList("/user", "/h2-console", "/swagger-ui", "/swagger-config", "/docs");
+    private static final String NO_CHECK_URL = "/api/v1/user/sign-in"; // "/login"으로 들어오는 요청은 Filter 작동 X
 
-    private final SecurityService securityService;
-
+    private final BhaSecurityService bhaSecurityService;
     private final GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) {
         try{
-            boolean isPassed = NO_CHECK_URL.stream().anyMatch(request.getRequestURI()::contains);
-            if(isPassed){
+            if(request.getRequestURI().equals(NO_CHECK_URL)){
                 filterChain.doFilter(request, response);
                 return;
             }
             log.debug("checkAccessTokenAndAuthentication() 호출");
 
-            securityService.extractAccessToken(request)
-                    .filter(securityService::isTokenValid)
-                    .flatMap(securityService::getUserDetails)
+            bhaSecurityService.extractAccessToken(request)
+                    .filter(bhaSecurityService::isTokenValid)
+                    .flatMap(bhaSecurityService::getUserDetails)
                     .ifPresent(this::saveAuthentication);
 
             filterChain.doFilter(request, response);

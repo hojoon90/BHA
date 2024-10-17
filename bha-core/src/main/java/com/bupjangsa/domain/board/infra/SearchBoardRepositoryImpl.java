@@ -1,6 +1,6 @@
 package com.bupjangsa.domain.board.infra;
 
-import com.bupjangsa.domain.board.BoardType;
+import com.bupjangsa.domain.board.type.BoardType;
 import com.bupjangsa.domain.board.dto.BoardCriteria;
 import com.bupjangsa.domain.board.entity.Board;
 import com.querydsl.core.types.dsl.BooleanExpression;

@@ -1,6 +1,7 @@
 package com.bupjangsa.domain.user.dto;
 
 import com.bupjangsa.domain.user.entity.User;
+import com.bupjangsa.domain.user.type.UserType;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -20,6 +21,7 @@ public class UserDto {
                     .accountId(accountId)
                     .password(password)
                     .userName(userName)
+                    .authority(UserType.MEMBER)
                     .build();
         }
 

@@ -1,6 +1,6 @@
 package com.bupjangsa.service;
 
-import com.bupjangsa.domain.board.BoardType;
+import com.bupjangsa.domain.board.type.BoardType;
 import com.bupjangsa.domain.board.dto.BoardCriteria;
 import com.bupjangsa.domain.board.entity.Board;
 import com.bupjangsa.domain.board.infra.BoardRepository;
@@ -10,12 +10,10 @@ import com.bupjangsa.exception.UserDataException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.bupjangsa.domain.board.dto.BoardDto.*;

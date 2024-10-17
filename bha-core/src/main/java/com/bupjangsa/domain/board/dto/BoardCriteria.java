@@ -1,6 +1,6 @@
 package com.bupjangsa.domain.board.dto;
 
-import com.bupjangsa.domain.board.BoardType;
+import com.bupjangsa.domain.board.type.BoardType;
 import lombok.Builder;
 import lombok.Getter;
 

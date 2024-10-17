@@ -2,6 +2,7 @@ package com.bupjangsa.domain.user.entity;
 
 import com.bupjangsa.domain.common.BaseEntity;
 import com.bupjangsa.domain.user.dto.UserDto;
+import com.bupjangsa.domain.user.type.UserType;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,13 +33,14 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String password;
 
+    @Enumerated
     @Column(nullable = false)
-    private String authority;
+    private UserType authority = UserType.MEMBER;
 
     private LocalDate signOutDate; //탈퇴 일자
 
     @Builder
-    public User(String accountId, String userName, String password, String authority, LocalDate signOutDate) {
+    public User(String accountId, String userName, String password, UserType authority, LocalDate signOutDate) {
         this.accountId = accountId;
         this.userName = userName;
         this.password = password;
