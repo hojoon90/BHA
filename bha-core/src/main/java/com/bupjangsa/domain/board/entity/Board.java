@@ -3,6 +3,7 @@ package com.bupjangsa.domain.board.entity;
 
 import com.bupjangsa.domain.common.BaseEntity;
 import com.bupjangsa.domain.board.BoardType;
+import com.bupjangsa.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,18 +21,31 @@ public class Board extends BaseEntity {
     private Long postId;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private BoardType boardType;
+
+    @Column(nullable = false)
+    private Long postNo;
 
     @Column(nullable = false)
     private String title;
 
     @Column(nullable = false)
-    private String content;
+    @Lob
+    private String contents;
 
     @Column(nullable = false)
-    private String createdBy;
+    @ManyToOne
+    private User createdBy;
 
-    private String updatedBy;
+    @ManyToOne
+    private User lastModifiedBy;
+
+    public void updateBoardData(String title, String contetns, User user){
+        this.title = title;
+        this.contents = contetns;
+        this.lastModifiedBy = user;
+    }
 
 
 }

@@ -42,13 +42,13 @@ public class UserService {
 
     public UserDto.UserInfo findUser(Long id){
         return userRepository.findById(id)
-                .map(UserDto.UserInfo::of)
+                .map(UserDto.UserInfo::from)
                 .orElseThrow(() -> new UserDataException("유저를 조회할 수 없습니다."));
     }
 
     public UserDto.UserInfo findUserByAccountId(String userId){
         return userRepository.findByAccountId(userId)
-                .map(UserDto.UserInfo::of)
+                .map(UserDto.UserInfo::from)
                 .orElseThrow(() -> new UserDataException("유저를 조회할 수 없습니다."));
     }
 

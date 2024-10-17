@@ -35,8 +35,8 @@ public class UserFacade {
      */
     @Transactional
     public AppResponse<Void> registUser(RegisterRequest request){
-        String encodePassword = securityService.encodePassword(request.getPassword());
 
+        String encodePassword = securityService.encodePassword(request.getPassword());
         UserDto.Register dto = UserDto.Register.builder()
                 .accountId(request.getAccountId())
                 .password(encodePassword)
@@ -46,23 +46,6 @@ public class UserFacade {
         userService.registerUser(dto);
         return AppResponse.responseVoidSuccess(HttpStatus.CREATED.value());
     }
-
-    /**
-     * 회원 정보 조회 메서드
-     * @param id
-     * @return
-     */
-    public AppResponse<UserInfo> findUser(Long userId){
-        UserDto.UserInfo user = userService.findUser(userId);
-
-        UserInfo response = UserInfo.builder()
-                .accountId(user.getAccountId())
-                .userName(user.getUserName())
-                .build();
-
-        return AppResponse.responseSuccess(response);
-    }
-
 
     /**
      * 회원 정보 수정 메서드
@@ -84,12 +67,25 @@ public class UserFacade {
 
     /**
      * 회원 탈퇴 메서드
-     * @param id
+     * @param userId
      * @return
      */
     public AppResponse<Void> deleteUser(Long userId){
+
         userService.deleteUser(userId);
         return AppResponse.responseVoidSuccess(HttpStatus.NO_CONTENT.value());
+    }
+
+
+    /**
+     * 회원 정보 조회 메서드
+     * @param userId
+     * @return
+     */
+    public AppResponse<UserDetail> findUser(Long userId){
+
+        UserDto.UserInfo user = userService.findUser(userId);
+        return AppResponse.responseSuccess(UserDetail.from(user));
     }
 
     /**
@@ -104,12 +100,7 @@ public class UserFacade {
         if(!checkPassword) throw new AuthorizeException("패스워드가 맞지 않습니다.");
 
         JwtDto.Tokens tokens = securityService.getTokens(userByUserId.getUserId(), userByUserId.getAccountId());
-        TokenResponse response = TokenResponse.builder()
-                .accessToken(tokens.getAccessToken())
-                .refreshToken(tokens.getRefreshToken())
-                .build();
-
-        return AppResponse.responseSuccess(response);
+        return AppResponse.responseSuccess(TokenResponse.from(tokens));
     }
 
 }

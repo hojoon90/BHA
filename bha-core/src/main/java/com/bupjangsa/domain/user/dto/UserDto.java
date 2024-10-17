@@ -42,7 +42,7 @@ public class UserDto {
         private String password;
         private String userName;
 
-        public static UserInfo of(User user) {
+        public static UserInfo from(User user) {
             return UserInfo.builder()
                     .userId(user.getUserId())
                     .accountId(user.getAccountId())

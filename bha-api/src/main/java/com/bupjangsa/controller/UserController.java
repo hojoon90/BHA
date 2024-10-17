@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import static com.bupjangsa.dto.request.UserRequest.*;
 import static com.bupjangsa.dto.response.UserResponse.TokenResponse;
-import static com.bupjangsa.dto.response.UserResponse.UserInfo;
+import static com.bupjangsa.dto.response.UserResponse.UserDetail;
 
 @RestController
 @RequestMapping(value = "/api/v1/user")
@@ -66,7 +66,7 @@ public class UserController {
 
     //회원 조회
     @GetMapping
-    public ResponseEntity<AppResponse<UserInfo>> getUser(
+    public ResponseEntity<AppResponse<UserDetail>> getUser(
             @AuthenticationPrincipal AppUserDetails user
     ) {
         return ResponseEntity.status(HttpStatus.OK)

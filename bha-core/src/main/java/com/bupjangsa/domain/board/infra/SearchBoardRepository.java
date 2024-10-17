@@ -1,10 +1,10 @@
 package com.bupjangsa.domain.board.infra;
 
+import com.bupjangsa.domain.board.dto.BoardCriteria;
 import com.bupjangsa.domain.board.entity.Board;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface SearchBoardRepository {
-    Board selectArticle(String boardType, int boardNo);
-    List<Board> selectArticleList(String boardType);
+    Page<Board> selectArticlePage(BoardCriteria.SearchList criteria, Pageable pageable);
 }

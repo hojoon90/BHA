@@ -2,17 +2,17 @@ package com.bupjangsa.controller;
 
 import com.bupjangsa.common.AppResponse;
 import com.bupjangsa.dto.AppUserDetails;
-import com.bupjangsa.dto.response.BoardResponse.PostInfo;
+import com.bupjangsa.dto.response.BoardResponse.PostDetail;
 import com.bupjangsa.facade.BoardFacade;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 import static com.bupjangsa.dto.request.BoardRequest.*;
+import static com.bupjangsa.dto.response.BoardResponse.PostPage;
 
 @RestController
 @RequestMapping(value = "api/v1/board/article")
@@ -45,21 +45,23 @@ public class BoardController {
             @RequestBody PostDeleteRequest request
     ){
         return ResponseEntity.status(HttpStatus.OK)
-                .body(boardFacade.deleteArticle(request));
+                .body(boardFacade.deleteArticle(user.getUserId(), request));
     }
 
-    @GetMapping(value = "/{boardType}/{boardNo}")
-    public ResponseEntity<AppResponse<PostInfo>>  getArticle(@PathVariable String boardType,
-                                                             @PathVariable Long boardNo){
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(boardFacade.selectArticle(boardType, boardNo));
-    }
-
-    @GetMapping(value = "/{boardType}")
-    public ResponseEntity<AppResponse<List<PostInfo>>>  getArticleList(
-            @PathVariable String boardType
+    @GetMapping(value = "/{boardType}/{postNo}")
+    public ResponseEntity<AppResponse<PostDetail>>  getArticle(
+            @PathVariable String boardType,
+            @PathVariable Long postNo
     ){
         return ResponseEntity.status(HttpStatus.OK)
-                .body(boardFacade.selectArticleList(boardType));
+                .body(boardFacade.selectArticle(boardType, postNo));
+    }
+
+    @GetMapping(value = "/list")
+    public ResponseEntity<AppResponse<PostPage>>  getArticleList(
+            @Valid final PageablePostSearchRequest request
+    ){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(boardFacade.selectArticleList(request));
     }
 }
