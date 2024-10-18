@@ -2,10 +2,10 @@ package com.bupjangsa.facade;
 
 import com.bupjangsa.common.AppResponse;
 import com.bupjangsa.domain.user.dto.UserDto;
-import com.bupjangsa.dto.JwtDto;
+import com.bupjangsa.security.dto.JwtDto;
 import com.bupjangsa.exception.AuthorizeException;
-import com.bupjangsa.service.BhaSecurityService;
-import com.bupjangsa.service.PasswordComponent;
+import com.bupjangsa.security.service.BhaSecurityService;
+import com.bupjangsa.security.service.PasswordComponent;
 import com.bupjangsa.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -64,7 +64,7 @@ public class UserFacade {
                 .build();
 
         userService.updateUser(dto);
-        return AppResponse.responseVoidSuccess(HttpStatus.NO_CONTENT.value());
+        return AppResponse.responseVoidSuccess(HttpStatus.OK.value());
     }
 
     /**
@@ -97,11 +97,11 @@ public class UserFacade {
      */
     public AppResponse<TokenResponse> login(LoginRequest request){
 
-        UserDto.UserInfo userByUserId = userService.findUserByAccountId(request.getAccountId());
-        boolean checkPassword = passwordComponent.checkUserValidation(request.getPassword(), userByUserId.getPassword());
+        UserDto.UserInfo userDto = userService.findUserByAccountId(request.getAccountId());
+        boolean checkPassword = passwordComponent.checkUserValidation(request.getPassword(), userDto.getPassword());
         if(!checkPassword) throw new AuthorizeException("패스워드가 맞지 않습니다.");
 
-        JwtDto.Tokens tokens = bhaSecurityService.getTokens(userByUserId.getUserId(), userByUserId.getAccountId());
+        JwtDto.Tokens tokens = bhaSecurityService.getTokens(userDto.getUserId(), userDto.getAccountId(), userDto.getAuthority());
         return AppResponse.responseSuccess(TokenResponse.from(tokens));
     }
 

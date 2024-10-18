@@ -1,12 +1,12 @@
 package com.bupjangsa.dto.request;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserRequest {
-    private UserRequest(){
-        /*Do Nothing*/
-    }
 
     @Getter
     @Builder

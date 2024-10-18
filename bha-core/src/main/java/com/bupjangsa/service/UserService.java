@@ -46,8 +46,8 @@ public class UserService {
                 .orElseThrow(() -> new UserDataException("유저를 조회할 수 없습니다."));
     }
 
-    public UserDto.UserInfo findUserByAccountId(String userId){
-        return userRepository.findByAccountId(userId)
+    public UserDto.UserInfo findUserByAccountId(String accountId){
+        return userRepository.findByAccountId(accountId)
                 .map(UserDto.UserInfo::from)
                 .orElseThrow(() -> new UserDataException("유저를 조회할 수 없습니다."));
     }

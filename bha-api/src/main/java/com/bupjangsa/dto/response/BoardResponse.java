@@ -1,18 +1,16 @@
 package com.bupjangsa.dto.response;
 
 import com.bupjangsa.domain.board.dto.BoardDto;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BoardResponse {
-
-    private BoardResponse(){
-        /*Do Nothing*/
-    }
 
     @Getter
     @Builder

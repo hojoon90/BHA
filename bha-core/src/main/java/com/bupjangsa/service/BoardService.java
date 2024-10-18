@@ -1,6 +1,6 @@
 package com.bupjangsa.service;
 
-import com.bupjangsa.domain.board.type.BoardType;
+import com.bupjangsa.type.BoardType;
 import com.bupjangsa.domain.board.dto.BoardCriteria;
 import com.bupjangsa.domain.board.entity.Board;
 import com.bupjangsa.domain.board.infra.BoardRepository;
@@ -14,9 +14,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.bupjangsa.domain.board.dto.BoardDto.*;
+import static com.bupjangsa.message.MessageConst.USER_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -28,12 +30,13 @@ public class BoardService {
 
     @Transactional
     public void postArticle(Register boardDto){
-
         User user = userRepository.findById(boardDto.getUserId())
-                .orElseThrow(() -> new UserDataException(""));
+                .orElseThrow(() -> new UserDataException(USER_NOT_FOUND.getMessage()));
 
-        //todo 게시판 별 번호 처리
-        Board entity = boardDto.toEntity(user);
+        Optional<Long> lastPostNo = boardRepository.findPostNoByBoardTypeOrderByPostNoDesc(boardDto.getBoardType());
+        Long newPostNo = lastPostNo.map(i -> i + 1).orElse(1L);
+
+        Board entity = boardDto.toEntity(user, newPostNo);
         boardRepository.save(entity);
     }
 

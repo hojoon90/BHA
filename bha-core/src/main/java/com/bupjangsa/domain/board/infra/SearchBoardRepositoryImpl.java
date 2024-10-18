@@ -1,6 +1,6 @@
 package com.bupjangsa.domain.board.infra;
 
-import com.bupjangsa.domain.board.type.BoardType;
+import com.bupjangsa.type.BoardType;
 import com.bupjangsa.domain.board.dto.BoardCriteria;
 import com.bupjangsa.domain.board.entity.Board;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -32,20 +32,19 @@ public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport
                                          Pageable pageable) {
         final JPQLQuery<Board> query = queryFactory.selectFrom(board)
                 .where(
-                        boardTypeContains(criteria.getBoardType())
+                        equalsBoardType(criteria.getBoardType())
                 )
-                .orderBy(board.postId.desc());
+                .orderBy(board.postNo.desc());
 
         final long total_count = query.fetch().size();
-        final List<Board> boardList = getQuerydsl()
-                .applyPagination(pageable, query).fetch();
+        final List<Board> boardList = getQuerydsl().applyPagination(pageable, query).fetch();
 
         return new PageImpl<>(boardList, pageable, total_count);
     }
 
-    private BooleanExpression boardTypeContains(final BoardType boardType) {
-        return boardType != null ? board.boardType.eq(boardType)
-                : null;
+    private BooleanExpression equalsBoardType(final BoardType boardType) {
+        return board.boardType.eq(boardType);
     }
+
 
 }

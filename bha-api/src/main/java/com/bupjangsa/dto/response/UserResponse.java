@@ -1,17 +1,15 @@
 package com.bupjangsa.dto.response;
 
-import com.bupjangsa.domain.user.dto.UserDto;
-import com.bupjangsa.dto.JwtDto;
+import com.bupjangsa.security.dto.JwtDto;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import static com.bupjangsa.domain.user.dto.UserDto.*;
+import static com.bupjangsa.domain.user.dto.UserDto.UserInfo;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserResponse {
-
-    private UserResponse(){
-        /*Do Nothing*/
-    }
 
     @Getter
     @Builder

@@ -1,8 +1,9 @@
-package com.bupjangsa.service;
+package com.bupjangsa.security.service;
 
-import com.bupjangsa.dto.AppUserDetails;
-import com.bupjangsa.dto.JwtDto;
+import com.bupjangsa.security.dto.AppUserDetails;
+import com.bupjangsa.security.dto.JwtDto;
 import com.bupjangsa.exception.AuthorizeException;
+import com.bupjangsa.type.AuthorityType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -12,8 +13,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,10 +39,10 @@ public class BhaSecurityService {
     }
 
     @Transactional
-    public JwtDto.Tokens getTokens(Long userId, String accountId){
+    public JwtDto.Tokens getTokens(Long userId, String accountId, AuthorityType authority){
 
-        String accessToken = this.createAccessToken(userId, accountId);
-        String refreshToken = this.createRefreshToken(accountId);
+        String accessToken = this.createAccessToken(userId, accountId, authority);
+        String refreshToken = this.createRefreshToken(accountId, authority);
 
         return JwtDto.Tokens.builder()
                 .accessToken(accessToken)
@@ -52,7 +51,7 @@ public class BhaSecurityService {
 
     }
 
-    public String createAccessToken(Long userId, String accountId) {
+    public String createAccessToken(Long userId, String accountId, AuthorityType authority) {
 
         LocalDateTime now = LocalDateTime.now();
         Date accessTokenExpiresIn = Timestamp.valueOf(now.plusDays(1));
@@ -60,6 +59,7 @@ public class BhaSecurityService {
         Claims claims = Jwts.claims()
                 .setSubject(String.valueOf(userId));
         claims.put("accountId", accountId);
+        claims.put("authority", authority);
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -68,12 +68,13 @@ public class BhaSecurityService {
                 .compact();
     }
 
-    public String createRefreshToken(String accountId){
+    public String createRefreshToken(String accountId, AuthorityType authority){
         LocalDateTime now = LocalDateTime.now();
         Date accessTokenExpiresIn = Timestamp.valueOf(now.plusDays(14));
 
         Claims claims = Jwts.claims();
         claims.put("accountId", accountId);
+        claims.put("userType", authority);
 
         return Jwts.builder()
                 .setClaims(claims)

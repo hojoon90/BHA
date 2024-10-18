@@ -1,13 +1,14 @@
 package com.bupjangsa.domain.user.dto;
 
 import com.bupjangsa.domain.user.entity.User;
-import com.bupjangsa.domain.user.type.UserType;
+import com.bupjangsa.type.AuthorityType;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserDto {
-
-    private UserDto(){/*Do Nothing*/}
 
     @Getter
     @Builder
@@ -21,7 +22,7 @@ public class UserDto {
                     .accountId(accountId)
                     .password(password)
                     .userName(userName)
-                    .authority(UserType.MEMBER)
+                    .authority(AuthorityType.MEMBER)
                     .build();
         }
 
@@ -43,6 +44,7 @@ public class UserDto {
         private String accountId;
         private String password;
         private String userName;
+        private AuthorityType authority;
 
         public static UserInfo from(User user) {
             return UserInfo.builder()
@@ -50,6 +52,7 @@ public class UserDto {
                     .accountId(user.getAccountId())
                     .userName(user.getUserName())
                     .password(user.getPassword())
+                    .authority(user.getAuthority())
                     .build();
         }
     }

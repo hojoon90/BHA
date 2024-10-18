@@ -1,26 +1,21 @@
 package com.bupjangsa.dto.request;
 
-import com.bupjangsa.domain.board.type.BoardType;
+import com.bupjangsa.type.BoardType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 import org.springframework.data.domain.PageRequest;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BoardRequest {
-
-    private BoardRequest(){
-        /*Do Nothing*/
-    }
 
     @Getter
     @Builder
     public static class PostRegisterRequest {
 
         private String title;
-        private String content;
+        private String contents;
         private BoardType boardType;
 
     }
@@ -31,7 +26,7 @@ public class BoardRequest {
 
         private Long postNo;
         private String title;
-        private String content;
+        private String contents;
         private BoardType boardType;
 
     }
@@ -64,7 +59,8 @@ public class BoardRequest {
         private final String boardType;
 
         public PageRequest getPageRequest() {
-            return PageRequest.of(this.getOffset(), this.getLimit());
+            int correctionOffset = Math.max(this.getOffset() - 1, 0);   //페이지 보정
+            return PageRequest.of(correctionOffset, this.getLimit());
         }
     }
 

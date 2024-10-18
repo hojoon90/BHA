@@ -2,18 +2,22 @@ package com.bupjangsa.domain.board.entity;
 
 
 import com.bupjangsa.domain.common.BaseEntity;
-import com.bupjangsa.domain.board.type.BoardType;
+import com.bupjangsa.type.BoardType;
 import com.bupjangsa.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 
 @Getter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "t_board")
+@SQLDelete(sql = "UPDATE t_board SET deleted = true where post_id = ?")
+@Where(clause = "deleted = false")  //삭제가 아닌 유저만 조회하도록 조건처리
+@NoArgsConstructor
+@AllArgsConstructor
 public class Board extends BaseEntity {
 
     @Id
@@ -21,7 +25,7 @@ public class Board extends BaseEntity {
     private Long postId;
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = BoardType.Converter.class)
     private BoardType boardType;
 
     @Column(nullable = false)

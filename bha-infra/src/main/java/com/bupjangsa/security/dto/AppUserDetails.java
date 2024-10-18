@@ -1,4 +1,4 @@
-package com.bupjangsa.dto;
+package com.bupjangsa.security.dto;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -23,7 +23,6 @@ public class AppUserDetails implements UserDetails {
         return AppUserDetails.builder()
                 .userId(userId)
                 .accountId(accountId)
-                //TODO Authority 추가
                 .build();
     }
 

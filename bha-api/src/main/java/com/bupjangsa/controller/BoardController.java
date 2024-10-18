@@ -1,7 +1,7 @@
 package com.bupjangsa.controller;
 
 import com.bupjangsa.common.AppResponse;
-import com.bupjangsa.dto.AppUserDetails;
+import com.bupjangsa.security.dto.AppUserDetails;
 import com.bupjangsa.dto.response.BoardResponse.PostDetail;
 import com.bupjangsa.facade.BoardFacade;
 import jakarta.validation.Valid;
@@ -35,7 +35,7 @@ public class BoardController {
             @AuthenticationPrincipal AppUserDetails user,
             @RequestBody PostUpdateRequest request
     ){
-        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(boardFacade.updateArticle(user.getUserId(), request));
     }
 
@@ -44,7 +44,7 @@ public class BoardController {
             @AuthenticationPrincipal AppUserDetails user,
             @RequestBody PostDeleteRequest request
     ){
-        return ResponseEntity.status(HttpStatus.OK)
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
                 .body(boardFacade.deleteArticle(user.getUserId(), request));
     }
 

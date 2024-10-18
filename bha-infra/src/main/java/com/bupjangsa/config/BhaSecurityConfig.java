@@ -1,7 +1,7 @@
 package com.bupjangsa.config;
 
-import com.bupjangsa.filter.JwtAuthenticationFilter;
-import com.bupjangsa.service.BhaSecurityService;
+import com.bupjangsa.security.filter.JwtAuthenticationFilter;
+import com.bupjangsa.security.service.BhaSecurityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -56,4 +56,5 @@ public class BhaSecurityConfig {
         return http.build();
 
     }
+
 }

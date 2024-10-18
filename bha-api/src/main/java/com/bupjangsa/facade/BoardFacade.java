@@ -1,7 +1,7 @@
 package com.bupjangsa.facade;
 
 import com.bupjangsa.common.AppResponse;
-import com.bupjangsa.domain.board.type.BoardType;
+import com.bupjangsa.type.BoardType;
 import com.bupjangsa.domain.board.dto.BoardCriteria;
 import com.bupjangsa.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +36,7 @@ public class BoardFacade {
         Register register = Register.builder()
                 .title(request.getTitle())
                 .boardType(request.getBoardType())
-                .contents(request.getContent())
+                .contents(request.getContents())
                 .userId(userId)
                 .build();
 
@@ -55,13 +55,13 @@ public class BoardFacade {
         Update update = Update.builder()
                 .postNo(request.getPostNo())
                 .title(request.getTitle())
-                .contents(request.getContent())
+                .contents(request.getContents())
                 .boardType(request.getBoardType())
                 .userId(userId)
                 .build();
 
         boardService.updateArticle(update);
-        return AppResponse.responseVoidSuccess(HttpStatus.NO_CONTENT.value());
+        return AppResponse.responseVoidSuccess(HttpStatus.OK.value());
     }
 
     /**
@@ -111,7 +111,5 @@ public class BoardFacade {
                 , postInfos.getPageable().getPageSize(), postInfos.getContent());
         return AppResponse.responseSuccess(page);
     }
-
-
 
 }

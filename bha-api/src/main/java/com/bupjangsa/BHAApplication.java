@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @EnableJpaAuditing
 public class BHAApplication {
     public static void main(String[] args){
-        System.setProperty("spring.config.name", "application,jpa-config,security-config");
+        System.setProperty("spring.config.name", "application,jpa-config,infra-config");
         SpringApplication.run(BHAApplication.class, args);
     }
 }

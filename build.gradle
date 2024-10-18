@@ -44,16 +44,28 @@ subprojects {
 project(':bha-api') { // 컴파일 시 multi-module-database 로딩
     dependencies {
         implementation project(':bha-core')
-        implementation project(':bha-security')
+        implementation project(':bha-infra')
+        implementation project(':bha-common')
     }
 }
 
-project(':bha-security') {
+project(':bha-infra') {
+    dependencies {
+        implementation project(':bha-common')
+    }
     bootJar.enabled = false
     jar.enabled = true
 }
 
 project(':bha-core') {
+    dependencies {
+        implementation project(':bha-common')
+    }
+    bootJar.enabled = false
+    jar.enabled = true
+}
+
+project(':bha-common') {
     bootJar.enabled = false
     jar.enabled = true
 }

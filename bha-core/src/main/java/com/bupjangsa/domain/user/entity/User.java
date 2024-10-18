@@ -2,7 +2,7 @@ package com.bupjangsa.domain.user.entity;
 
 import com.bupjangsa.domain.common.BaseEntity;
 import com.bupjangsa.domain.user.dto.UserDto;
-import com.bupjangsa.domain.user.type.UserType;
+import com.bupjangsa.type.AuthorityType;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,12 +12,14 @@ import org.hibernate.annotations.Where;
 
 import java.time.LocalDate;
 
+import static lombok.AccessLevel.PROTECTED;
+
 @Getter
 @Entity
 @Table(name = "t_user")
-@SQLDelete(sql = "UPDATE t_user SET deleted = true where id = ?")
+@SQLDelete(sql = "UPDATE t_user SET deleted = true where user_id = ?")
 @Where(clause = "deleted = false")  //삭제가 아닌 유저만 조회하도록 조건처리
-@NoArgsConstructor
+@NoArgsConstructor(access = PROTECTED)
 public class User extends BaseEntity {
 
     @Id
@@ -35,12 +37,12 @@ public class User extends BaseEntity {
 
     @Enumerated
     @Column(nullable = false)
-    private UserType authority = UserType.MEMBER;
+    private AuthorityType authority;
 
     private LocalDate signOutDate; //탈퇴 일자
 
     @Builder
-    public User(String accountId, String userName, String password, UserType authority, LocalDate signOutDate) {
+    public User(String accountId, String userName, String password, AuthorityType authority, LocalDate signOutDate) {
         this.accountId = accountId;
         this.userName = userName;
         this.password = password;

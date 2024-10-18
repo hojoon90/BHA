@@ -1,7 +1,7 @@
 package com.bupjangsa.controller;
 
 import com.bupjangsa.common.AppResponse;
-import com.bupjangsa.dto.AppUserDetails;
+import com.bupjangsa.security.dto.AppUserDetails;
 import com.bupjangsa.facade.UserFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,8 +21,8 @@ public class UserController {
     private final UserFacade userFacade;
 
     //사용자 가입
-    @PostMapping
-    public ResponseEntity<AppResponse<Void>> registUser(
+    @PostMapping("/register")
+    public ResponseEntity<AppResponse<Void>> registerUser(
             @RequestBody final RegisterRequest request
     ) {
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -50,7 +50,7 @@ public class UserController {
             @AuthenticationPrincipal AppUserDetails user,
             @RequestBody final UpdateRequest request
     ) {
-        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(userFacade.updateUser(user.getUserId(), request));
     }
 

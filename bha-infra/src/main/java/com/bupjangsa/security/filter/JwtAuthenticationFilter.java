@@ -1,8 +1,9 @@
-package com.bupjangsa.filter;
+package com.bupjangsa.security.filter;
 
-import com.bupjangsa.service.BhaSecurityService;
+import com.bupjangsa.security.service.BhaSecurityService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -17,13 +18,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.util.Arrays;
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private static final String NO_CHECK_URL = "/api/v1/user/sign-in"; // "/login"으로 들어오는 요청은 Filter 작동 X
+    private static final String[] NO_CHECK_URL = {"/api/v1/user/login", "/api/v1/user/register", "/h2-console"}; // "/login"으로 들어오는 요청은 Filter 작동 X
 
     private final BhaSecurityService bhaSecurityService;
     private final GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
@@ -32,10 +32,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) {
         try{
-            if(request.getRequestURI().equals(NO_CHECK_URL)){
-                filterChain.doFilter(request, response);
-                return;
-            }
             log.debug("checkAccessTokenAndAuthentication() 호출");
 
             bhaSecurityService.extractAccessToken(request)
@@ -47,6 +43,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }catch (Exception e){
             jwtExceptionHandler(response);
         }
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        return Arrays.stream(NO_CHECK_URL)
+                .anyMatch(request.getRequestURI()::contains);
     }
 
     public void saveAuthentication(UserDetails userDetailsUser) {
