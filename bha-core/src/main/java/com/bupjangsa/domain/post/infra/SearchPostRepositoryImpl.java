@@ -1,8 +1,8 @@
-package com.bupjangsa.domain.board.infra;
+package com.bupjangsa.domain.post.infra;
 
 import com.bupjangsa.type.BoardType;
-import com.bupjangsa.domain.board.dto.BoardCriteria;
-import com.bupjangsa.domain.board.entity.Board;
+import com.bupjangsa.domain.post.dto.PostCriteria;
+import com.bupjangsa.domain.post.entity.Post;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -14,32 +14,32 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.bupjangsa.domain.board.entity.QBoard.*;
+import static com.bupjangsa.domain.post.entity.QBoard.*;
 
 @Repository
-public class SearchBoardRepositoryImpl extends QuerydslRepositorySupport
-        implements SearchBoardRepository {
+public class SearchPostRepositoryImpl extends QuerydslRepositorySupport
+        implements SearchPostRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public SearchBoardRepositoryImpl(JPAQueryFactory queryFactory) {
-        super(Board.class);
+    public SearchPostRepositoryImpl(JPAQueryFactory queryFactory) {
+        super(Post.class);
         this.queryFactory = queryFactory;
     }
 
     @Override
-    public Page<Board> selectArticlePage(BoardCriteria.SearchList criteria,
-                                         Pageable pageable) {
-        final JPQLQuery<Board> query = queryFactory.selectFrom(board)
+    public Page<Post> selectPostPage(PostCriteria.SearchList criteria,
+                                     Pageable pageable) {
+        final JPQLQuery<Post> query = queryFactory.selectFrom(board)
                 .where(
                         equalsBoardType(criteria.getBoardType())
                 )
                 .orderBy(board.postNo.desc());
 
         final long total_count = query.fetch().size();
-        final List<Board> boardList = getQuerydsl().applyPagination(pageable, query).fetch();
+        final List<Post> postList = getQuerydsl().applyPagination(pageable, query).fetch();
 
-        return new PageImpl<>(boardList, pageable, total_count);
+        return new PageImpl<>(postList, pageable, total_count);
     }
 
     private BooleanExpression equalsBoardType(final BoardType boardType) {

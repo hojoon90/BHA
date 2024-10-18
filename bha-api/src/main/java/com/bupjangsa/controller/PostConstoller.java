@@ -15,53 +15,53 @@ import static com.bupjangsa.dto.request.BoardRequest.*;
 import static com.bupjangsa.dto.response.BoardResponse.PostPage;
 
 @RestController
-@RequestMapping(value = "api/v1/board/article")
+@RequestMapping(value = "api/v1/board/post")
 @RequiredArgsConstructor
-public class BoardController {
+public class PostConstoller {
 
     private final BoardFacade boardFacade;
 
     @PostMapping
-    public ResponseEntity<AppResponse<Void>> postArticle(
+    public ResponseEntity<AppResponse<Void>> registerPost(
             @AuthenticationPrincipal AppUserDetails user,
             @RequestBody final PostRegisterRequest request
     ){
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(boardFacade.postArticle(user.getUserId(), request));
+                .body(boardFacade.registerPost(user.getUserId(), request));
     }
 
     @PutMapping
-    public ResponseEntity<AppResponse<Void>> putArticle(
+    public ResponseEntity<AppResponse<Void>> updatePost(
             @AuthenticationPrincipal AppUserDetails user,
             @RequestBody PostUpdateRequest request
     ){
         return ResponseEntity.status(HttpStatus.OK)
-                .body(boardFacade.updateArticle(user.getUserId(), request));
+                .body(boardFacade.updatePost(user.getUserId(), request));
     }
 
     @DeleteMapping
-    public ResponseEntity<AppResponse<Void>> deleteArticle(
+    public ResponseEntity<AppResponse<Void>> deletePost(
             @AuthenticationPrincipal AppUserDetails user,
             @RequestBody PostDeleteRequest request
     ){
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
-                .body(boardFacade.deleteArticle(user.getUserId(), request));
+                .body(boardFacade.deletePost(user.getUserId(), request));
     }
 
     @GetMapping(value = "/{boardType}/{postNo}")
-    public ResponseEntity<AppResponse<PostDetail>>  getArticle(
+    public ResponseEntity<AppResponse<PostDetail>> getPost(
             @PathVariable String boardType,
             @PathVariable Long postNo
     ){
         return ResponseEntity.status(HttpStatus.OK)
-                .body(boardFacade.selectArticle(boardType, postNo));
+                .body(boardFacade.selectPost(boardType, postNo));
     }
 
     @GetMapping(value = "/list")
-    public ResponseEntity<AppResponse<PostPage>>  getArticleList(
+    public ResponseEntity<AppResponse<PostPage>> getPostList(
             @Valid final PageablePostSearchRequest request
     ){
         return ResponseEntity.status(HttpStatus.OK)
-                .body(boardFacade.selectArticleList(request));
+                .body(boardFacade.selectPostList(request));
     }
 }

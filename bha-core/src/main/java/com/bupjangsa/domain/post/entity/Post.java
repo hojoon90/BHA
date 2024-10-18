@@ -1,4 +1,4 @@
-package com.bupjangsa.domain.board.entity;
+package com.bupjangsa.domain.post.entity;
 
 
 import com.bupjangsa.domain.common.BaseEntity;
@@ -13,12 +13,12 @@ import org.hibernate.annotations.Where;
 @Getter
 @Builder
 @Entity
-@Table(name = "t_board")
-@SQLDelete(sql = "UPDATE t_board SET deleted = true where post_id = ?")
+@Table(name = "t_post")
+@SQLDelete(sql = "UPDATE t_post SET deleted = true where post_id = ?")
 @Where(clause = "deleted = false")  //삭제가 아닌 유저만 조회하도록 조건처리
 @NoArgsConstructor
 @AllArgsConstructor
-public class Board extends BaseEntity {
+public class Post extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,7 +46,7 @@ public class Board extends BaseEntity {
     @JoinColumn(name = "last_modified_by")
     private User lastModifiedBy;
 
-    public void updateBoardData(String title, String contetns, User user){
+    public void updatePostData(String title, String contetns, User user){
         this.title = title;
         this.contents = contetns;
         this.lastModifiedBy = user;

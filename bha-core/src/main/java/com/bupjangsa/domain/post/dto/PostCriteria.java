@@ -1,4 +1,4 @@
-package com.bupjangsa.domain.board.dto;
+package com.bupjangsa.domain.post.dto;
 
 import com.bupjangsa.type.BoardType;
 import lombok.AccessLevel;
@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class BoardCriteria {
+public class PostCriteria {
 
     @Getter
     @Builder

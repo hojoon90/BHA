@@ -22,6 +22,8 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Optional;
 
+import static com.bupjangsa.message.MessageConst.UNAUTHORIZED_TOKEN;
+
 @Slf4j
 @Service
 public class BhaSecurityService {
@@ -109,7 +111,7 @@ public class BhaSecurityService {
 
             return Optional.ofNullable(AppUserDetails.valueOf(userId, accountId));
         } catch (Exception e) {
-            log.error("액세스 토큰이 유효하지 않습니다.");
+            log.error(UNAUTHORIZED_TOKEN.getMessage());
             return Optional.empty();
         }
     }
@@ -123,7 +125,7 @@ public class BhaSecurityService {
             return true;
         } catch (Exception e) {
             log.error("유효하지 않은 토큰입니다. {}", e.getMessage());
-            throw new AuthorizeException("액세스 토큰이 유효하지 않습니다.");
+            throw new AuthorizeException(UNAUTHORIZED_TOKEN.getMessage());
         }
     }
 

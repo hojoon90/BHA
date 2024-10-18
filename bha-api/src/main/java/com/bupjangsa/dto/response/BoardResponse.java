@@ -1,6 +1,6 @@
 package com.bupjangsa.dto.response;
 
-import com.bupjangsa.domain.board.dto.BoardDto;
+import com.bupjangsa.domain.post.dto.PostDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,7 +22,7 @@ public class BoardResponse {
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
 
-        public static PostDetail from(BoardDto.PostInfo dto){
+        public static PostDetail from(PostDto.PostInfo dto){
             return PostDetail.builder()
                     .postNo(dto.getPostNo())
                     .title(dto.getTitle())
@@ -41,7 +41,7 @@ public class BoardResponse {
         private long pageSize;
         private List<PostDetail> postDetails;
 
-        public static PostPage of(long count, int totalPages, long pageSize, List<BoardDto.PostInfo> postDetails) {
+        public static PostPage of(long count, int totalPages, long pageSize, List<PostDto.PostInfo> postDetails) {
             final List<PostDetail> collect = postDetails.stream().map(PostDetail::from).toList();
             return PostPage.builder()
                     .count(count)

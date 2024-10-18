@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static com.bupjangsa.dto.request.UserRequest.*;
 import static com.bupjangsa.dto.response.UserResponse.*;
+import static com.bupjangsa.message.MessageConst.WRONG_PASSWORD;
 
 /**
  * Facade 는 아래 역할만 수행한다.
@@ -86,7 +87,7 @@ public class UserFacade {
      */
     public AppResponse<UserDetail> findUser(Long userId){
 
-        UserDto.UserInfo user = userService.findUser(userId);
+        final UserDto.UserInfo user = userService.findUser(userId);
         return AppResponse.responseSuccess(UserDetail.from(user));
     }
 
@@ -99,9 +100,9 @@ public class UserFacade {
 
         UserDto.UserInfo userDto = userService.findUserByAccountId(request.getAccountId());
         boolean checkPassword = passwordComponent.checkUserValidation(request.getPassword(), userDto.getPassword());
-        if(!checkPassword) throw new AuthorizeException("패스워드가 맞지 않습니다.");
+        if(!checkPassword) throw new AuthorizeException(WRONG_PASSWORD.getMessage());
 
-        JwtDto.Tokens tokens = bhaSecurityService.getTokens(userDto.getUserId(), userDto.getAccountId(), userDto.getAuthority());
+        final JwtDto.Tokens tokens = bhaSecurityService.getTokens(userDto.getUserId(), userDto.getAccountId(), userDto.getAuthority());
         return AppResponse.responseSuccess(TokenResponse.from(tokens));
     }
 

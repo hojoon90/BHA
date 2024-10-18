@@ -20,7 +20,6 @@ spring:
         # update: 애플리케이션 실행 시 변경점만 반영됩니다.
         # validate: 현재 테이블 정보가 entity에 정의된 내용과 동일한지 체크합니다. 다를 경우 경고를 출력하며 애플리케이션을 실행시키지 않습니다.
         # none: 자동생성을 사용하지 않습니다.
-      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
     properties:
       hibernate:
         default_batch_fetch_size: 1000

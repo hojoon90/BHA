@@ -2,14 +2,14 @@ package com.bupjangsa.facade;
 
 import com.bupjangsa.common.AppResponse;
 import com.bupjangsa.type.BoardType;
-import com.bupjangsa.domain.board.dto.BoardCriteria;
-import com.bupjangsa.service.BoardService;
+import com.bupjangsa.domain.post.dto.PostCriteria;
+import com.bupjangsa.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import static com.bupjangsa.domain.board.dto.BoardDto.*;
+import static com.bupjangsa.domain.post.dto.PostDto.*;
 import static com.bupjangsa.dto.request.BoardRequest.*;
 import static com.bupjangsa.dto.response.BoardResponse.*;
 
@@ -23,7 +23,7 @@ import static com.bupjangsa.dto.response.BoardResponse.*;
 @RequiredArgsConstructor
 public class BoardFacade {
 
-    private final BoardService boardService;
+    private final PostService postService;
 
     /**
      * 게시물 등록
@@ -31,7 +31,7 @@ public class BoardFacade {
      * @param request
      * @return
      */
-    public AppResponse<Void> postArticle(Long userId, PostRegisterRequest request){
+    public AppResponse<Void> registerPost(Long userId, PostRegisterRequest request){
 
         Register register = Register.builder()
                 .title(request.getTitle())
@@ -40,7 +40,7 @@ public class BoardFacade {
                 .userId(userId)
                 .build();
 
-        boardService.postArticle(register);
+        postService.registerPost(register);
         return AppResponse.responseVoidSuccess(HttpStatus.CREATED.value());
     }
 
@@ -50,7 +50,7 @@ public class BoardFacade {
      * @param request
      * @return
      */
-    public AppResponse<Void> updateArticle(Long userId, PostUpdateRequest request){
+    public AppResponse<Void> updatePost(Long userId, PostUpdateRequest request){
 
         Update update = Update.builder()
                 .postNo(request.getPostNo())
@@ -60,7 +60,7 @@ public class BoardFacade {
                 .userId(userId)
                 .build();
 
-        boardService.updateArticle(update);
+        postService.updatePost(update);
         return AppResponse.responseVoidSuccess(HttpStatus.OK.value());
     }
 
@@ -70,7 +70,7 @@ public class BoardFacade {
      * @param request
      * @return
      */
-    public AppResponse<Void> deleteArticle(Long userId, PostDeleteRequest request){
+    public AppResponse<Void> deletePost(Long userId, PostDeleteRequest request){
 
         Delete delete = Delete.builder()
                 .postNo(request.getPostNo())
@@ -78,7 +78,7 @@ public class BoardFacade {
                 .userId(userId)
                 .build();
 
-        boardService.deleteArticle(delete);
+        postService.deletePost(delete);
         return AppResponse.responseVoidSuccess(HttpStatus.NO_CONTENT.value());
     }
 
@@ -88,10 +88,10 @@ public class BoardFacade {
      * @param postNo
      * @return
      */
-    public AppResponse<PostDetail> selectArticle(String boardTypeStr, Long postNo){
+    public AppResponse<PostDetail> selectPost(String boardTypeStr, Long postNo){
 
-        final BoardType boardType = BoardType.valueOf(boardTypeStr);
-        PostInfo postInfo = boardService.selectArticle(boardType, postNo);
+        BoardType boardType = BoardType.valueOf(boardTypeStr);
+        final PostInfo postInfo = postService.selectPost(boardType, postNo);
 
         return AppResponse.responseSuccess(PostDetail.from(postInfo));
     }
@@ -101,13 +101,13 @@ public class BoardFacade {
      * @param request
      * @return
      */
-    public AppResponse<PostPage> selectArticleList(PageablePostSearchRequest request){
-        BoardCriteria.SearchList criteria = BoardCriteria.SearchList.builder()
+    public AppResponse<PostPage> selectPostList(PageablePostSearchRequest request){
+        final PostCriteria.SearchList criteria = PostCriteria.SearchList.builder()
                 .boardType(BoardType.valueOf(request.getBoardType()))
                 .build();
-        Page<PostInfo> postInfos = boardService.selectArticleList(criteria, request.getPageRequest());
+        Page<PostInfo> postInfos = postService.selectPostList(criteria, request.getPageRequest());
 
-        PostPage page = PostPage.of(postInfos.getTotalElements(), postInfos.getTotalPages()
+        final PostPage page = PostPage.of(postInfos.getTotalElements(), postInfos.getTotalPages()
                 , postInfos.getPageable().getPageSize(), postInfos.getContent());
         return AppResponse.responseSuccess(page);
     }

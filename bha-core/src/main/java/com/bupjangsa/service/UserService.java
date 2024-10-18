@@ -3,12 +3,15 @@ package com.bupjangsa.service;
 import com.bupjangsa.domain.user.dto.UserDto;
 import com.bupjangsa.domain.user.entity.User;
 import com.bupjangsa.domain.user.infra.UserRepository;
-import com.bupjangsa.exception.UserDataException;
+import com.bupjangsa.exception.DataProcessException;
+import com.bupjangsa.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+
+import static com.bupjangsa.message.MessageConst.USER_NOT_FOUND;
 
 /**
  * Repository 에서 데이터 처리 후 DTO를 리턴합니다.
@@ -25,9 +28,7 @@ public class UserService {
     public void registerUser(UserDto.Register userDto){
         User user = userDto.toEntity();
         Optional<User> userInfo = userRepository.findByAccountId(user.getAccountId());
-        if(userInfo.isPresent()){
-            throw new UserDataException("이미 존재하는 유저입니다.");
-        }
+        if(userInfo.isPresent()) throw new DataProcessException("이미 존재하는 유저입니다.");
 
         userRepository.save(user);
     }
@@ -35,29 +36,29 @@ public class UserService {
     @Transactional
     public void updateUser(UserDto.Update userDto){
         User user = userRepository.findById(userDto.getId())
-                .orElseThrow(() -> new UserDataException("유저를 조회할 수 없습니다."));
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND.getMessage()));
 
         user.updateUserData(userDto);
-    }
-
-    public UserDto.UserInfo findUser(Long id){
-        return userRepository.findById(id)
-                .map(UserDto.UserInfo::from)
-                .orElseThrow(() -> new UserDataException("유저를 조회할 수 없습니다."));
-    }
-
-    public UserDto.UserInfo findUserByAccountId(String accountId){
-        return userRepository.findByAccountId(accountId)
-                .map(UserDto.UserInfo::from)
-                .orElseThrow(() -> new UserDataException("유저를 조회할 수 없습니다."));
     }
 
     @Transactional
     public void deleteUser(Long id){
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserDataException("유저를 조회할 수 없습니다."));
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND.getMessage()));
         user.updateSignOutDate();
         userRepository.delete(user);
+    }
+
+    public UserDto.UserInfo findUser(Long id){
+        return userRepository.findById(id)
+                .map(UserDto.UserInfo::from)
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND.getMessage()));
+    }
+
+    public UserDto.UserInfo findUserByAccountId(String accountId){
+        return userRepository.findByAccountId(accountId)
+                .map(UserDto.UserInfo::from)
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND.getMessage()));
     }
 
 }

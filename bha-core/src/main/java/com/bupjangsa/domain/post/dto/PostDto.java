@@ -1,7 +1,7 @@
-package com.bupjangsa.domain.board.dto;
+package com.bupjangsa.domain.post.dto;
 
+import com.bupjangsa.domain.post.entity.Post;
 import com.bupjangsa.type.BoardType;
-import com.bupjangsa.domain.board.entity.Board;
 import com.bupjangsa.domain.user.entity.User;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class BoardDto {
+public class PostDto {
 
     @Getter
     @Builder
@@ -23,8 +23,8 @@ public class BoardDto {
         private Long userId;
 
 
-        public Board toEntity(User user, Long postNo){
-            return Board.builder()
+        public Post toEntity(User user, Long postNo){
+            return Post.builder()
                     .postNo(postNo)
                     .title(title)
                     .contents(contents)
@@ -67,7 +67,7 @@ public class BoardDto {
         private String createdBy;
         private LocalDateTime createdAt;
 
-        public static PostInfo from(Board entity) {
+        public static PostInfo from(Post entity) {
             return PostInfo.builder()
                     .postId(entity.getPostId())
                     .postNo(entity.getPostNo())
