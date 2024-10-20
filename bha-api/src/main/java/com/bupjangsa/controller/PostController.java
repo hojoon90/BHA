@@ -15,9 +15,9 @@ import static com.bupjangsa.dto.request.BoardRequest.*;
 import static com.bupjangsa.dto.response.BoardResponse.PostPage;
 
 @RestController
-@RequestMapping(value = "api/v1/board/post")
+@RequestMapping(value = "api/v1/post")
 @RequiredArgsConstructor
-public class PostConstoller {
+public class PostController {
 
     private final BoardFacade boardFacade;
 

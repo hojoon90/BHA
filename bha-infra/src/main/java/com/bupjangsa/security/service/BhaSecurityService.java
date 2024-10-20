@@ -90,7 +90,7 @@ public class BhaSecurityService {
      * 삭제(""로 replace)
      */
     public Optional<String> extractAccessToken(HttpServletRequest request) {
-        return Optional.of(request.getHeader(ACCESS_HEADER))
+        return Optional.ofNullable(request.getHeader(ACCESS_HEADER))
                 .filter(accessToken -> accessToken.startsWith(BEARER))
                 .map(accessToken -> accessToken.replace(BEARER, ""));
     }
@@ -106,7 +106,6 @@ public class BhaSecurityService {
 
             Long userId = Long.valueOf(String.valueOf(body.get("sub")));
             String accountId = String.valueOf(body.get("userId"));
-//            String idTypeStr = String.valueOf(body.get("idType"));
 
 
             return Optional.ofNullable(AppUserDetails.valueOf(userId, accountId));

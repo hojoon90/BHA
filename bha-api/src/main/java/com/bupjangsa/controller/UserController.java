@@ -21,7 +21,7 @@ public class UserController {
     private final UserFacade userFacade;
 
     //사용자 가입
-    @PostMapping("/register")
+    @PostMapping
     public ResponseEntity<AppResponse<Void>> registerUser(
             @RequestBody final RegisterRequest request
     ) {
