@@ -79,36 +79,26 @@ public class BhaSecurityConfig {
 
     }
 
-    //인가 처리
+    //403 Forbidden
     private final AccessDeniedHandler accessDeniedHandler =
             (request, response, authException) -> {
-                AuthErrorResponse<Void> errorResponse = AuthErrorResponse.<Void>builder()
-                        .resultCode(HttpStatus.FORBIDDEN.value())
-                        .resultMsg(MessageConst.FORBIDDEN_AUTHORIZED.getMessage())
-                        .build();
-
+                AuthErrorResponse<Void> errorResponse = AuthErrorResponse.forbidden();
                 sendResponse(response, errorResponse);
             };
 
-    //인증 처리
+    //401 Unauthorized
     private final AuthenticationEntryPoint unauthorizedEntryPoint =
             (request, response, authException) -> {
-                AuthErrorResponse<Void> errorResponse = AuthErrorResponse.<Void>builder()
-                        .resultCode(HttpStatus.UNAUTHORIZED.value())
-                        .resultMsg(MessageConst.UNAUTHORIZED_TOKEN.getMessage())
-                        .build();
-
+                AuthErrorResponse<Void> errorResponse = AuthErrorResponse.unauthorized();
                 sendResponse(response, errorResponse);
             };
 
-    private void sendResponse(HttpServletResponse response, AuthErrorResponse<Void> errorResponse) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        String jsonErrorResponse = objectMapper.writeValueAsString(errorResponse);
 
+    private void sendResponse(HttpServletResponse response, AuthErrorResponse<Void> errorResponse) throws IOException {
+        String jsonErrorResponse = new ObjectMapper().writeValueAsString(errorResponse);
         response.setStatus(errorResponse.getResultCode());
         response.setCharacterEncoding("utf-8");
         response.setContentType(MediaType.APPLICATION_JSON_VALUE); // application/json
         response.getWriter().write(jsonErrorResponse);
     }
-
 }

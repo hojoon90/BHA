@@ -1,5 +1,8 @@
 package com.bupjangsa.security.filter;
 
+import com.bupjangsa.exception.AuthorizeException;
+import com.bupjangsa.message.MessageConst;
+import com.bupjangsa.security.dto.AuthErrorResponse;
 import com.bupjangsa.security.service.BhaSecurityService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
@@ -17,6 +20,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.util.Optional;
+
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -40,7 +45,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             filterChain.doFilter(request, response);
         }catch (Exception e){
-            jwtExceptionHandler(response);
+            throw new AuthorizeException(MessageConst.UNAUTHORIZED_TOKEN.getMessage());
         }
     }
 
@@ -53,15 +58,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
-    public void jwtExceptionHandler(HttpServletResponse response) {
-        response.setStatus(HttpStatus.UNAUTHORIZED.value());
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        try {
-            String json = new ObjectMapper().writeValueAsString("사용할 수 없는 토큰입니다.");
-            response.getWriter().write(json);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
-    }
 }

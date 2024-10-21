@@ -123,7 +123,7 @@ public class BhaSecurityService {
                     .parseClaimsJws(token);
             return true;
         } catch (Exception e) {
-            log.error("유효하지 않은 토큰입니다. {}", e.getMessage());
+            log.error(UNAUTHORIZED_TOKEN.getMessage()+" {}", e.getMessage());
             throw new AuthorizeException(UNAUTHORIZED_TOKEN.getMessage());
         }
     }

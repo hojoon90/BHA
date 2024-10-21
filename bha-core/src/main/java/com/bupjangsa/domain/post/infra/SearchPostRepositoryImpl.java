@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.bupjangsa.domain.post.entity.QBoard.*;
+import static com.bupjangsa.domain.post.entity.QPost.*;
 
 @Repository
 public class SearchPostRepositoryImpl extends QuerydslRepositorySupport
@@ -30,11 +30,11 @@ public class SearchPostRepositoryImpl extends QuerydslRepositorySupport
     @Override
     public Page<Post> selectPostPage(PostCriteria.SearchList criteria,
                                      Pageable pageable) {
-        final JPQLQuery<Post> query = queryFactory.selectFrom(board)
+        final JPQLQuery<Post> query = queryFactory.selectFrom(post)
                 .where(
                         equalsBoardType(criteria.getBoardType())
                 )
-                .orderBy(board.postNo.desc());
+                .orderBy(post.postNo.desc());
 
         final long total_count = query.fetch().size();
         final List<Post> postList = getQuerydsl().applyPagination(pageable, query).fetch();
@@ -43,7 +43,7 @@ public class SearchPostRepositoryImpl extends QuerydslRepositorySupport
     }
 
     private BooleanExpression equalsBoardType(final BoardType boardType) {
-        return board.boardType.eq(boardType);
+        return post.boardType.eq(boardType);
     }
 
 
